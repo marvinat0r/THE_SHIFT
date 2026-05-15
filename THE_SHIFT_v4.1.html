@@ -1,0 +1,2984 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE SHIFT v4.1 — Marvin's Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;600;800;900&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0908;
+  --bg-soft: #14110f;
+  --bg-card: #1a1714;
+  --bg-elevated: #221e1a;
+  --line: #2a2520;
+  --line-bright: #3a3530;
+  --text: #f5f3ee;
+  --text-dim: #a39f97;
+  --text-faint: #6b675f;
+  --accent: #ff4923;
+  --accent-glow: #ff6b47;
+  --push: #ff4923;
+  --pull: #4a9eff;
+  --legs: #c4ff47;
+  --pump: #c47bff;
+  --sculpt: #00d4a8;
+  --basketball: #ffb547;
+  --rest: #6b675f;
+  --shadow-glow: 0 0 60px rgba(255, 73, 35, 0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Geist', -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(255, 73, 35, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 100%, rgba(74, 158, 255, 0.05) 0%, transparent 50%);
+}
+
+.display { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; line-height: 0.9; letter-spacing: -0.02em; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+/* ============ NAVIGATION ============ */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10, 9, 8, 0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.logo { display: flex; align-items: center; gap: 12px; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 24px; letter-spacing: 0.02em; }
+.logo-mark { width: 32px; height: 32px; background: var(--accent); position: relative; display: grid; place-items: center; transform: rotate(-6deg); }
+.logo-mark::after { content: ''; width: 12px; height: 12px; background: var(--bg); transform: rotate(45deg); }
+.nav-week { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ============ HERO ============ */
+.hero { padding: 80px 0 64px; position: relative; overflow: hidden; }
+.hero::before { content: 'SHIFT'; position: absolute; top: 50%; right: -100px; transform: translateY(-50%); font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: clamp(200px, 30vw, 380px); color: var(--bg-soft); letter-spacing: -0.05em; pointer-events: none; user-select: none; z-index: 0; }
+.hero-grid { display: grid; grid-template-columns: 1fr 360px; gap: 64px; align-items: end; position: relative; z-index: 1; }
+.hero-tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--bg-card); border: 1px solid var(--line-bright); border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px; }
+.hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.hero-title { font-size: clamp(72px, 10vw, 144px); margin-bottom: 24px; }
+.hero-title .accent { color: var(--accent); font-style: italic; }
+.hero-sub { font-size: 18px; color: var(--text-dim); max-width: 480px; margin-bottom: 32px; line-height: 1.6; }
+.hero-meta { display: flex; gap: 32px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-faint); letter-spacing: 0.05em; }
+.hero-meta strong { color: var(--text); font-weight: 500; }
+
+/* Stats card */
+.stats-card { background: var(--bg-card); border: 1px solid var(--line); padding: 28px; position: relative; }
+.stats-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 24px; height: 24px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+.stats-card::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 24px; height: 24px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+.stats-card h3 { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; }
+.stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.stat-row:last-of-type { border: none; }
+.stat-label { font-size: 13px; color: var(--text-dim); }
+.stat-value { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 28px; color: var(--text); letter-spacing: -0.02em; }
+.stat-unit { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); margin-left: 4px; }
+.progress-block { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+.progress-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; }
+.progress-head .label { color: var(--text-faint); text-transform: uppercase; }
+.progress-head .value { color: var(--accent); font-weight: 700; }
+.progress-bar { height: 6px; background: var(--bg); border-radius: 100px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-glow)); width: 0%; border-radius: 100px; transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px var(--accent); }
+
+/* Freq banner */
+.freq-banner { background: var(--bg-card); border: 1px solid var(--line); padding: 20px 28px; margin-top: 32px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+.freq-banner h4 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.01em; text-transform: uppercase; color: var(--accent); }
+.freq-list { display: flex; gap: 28px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.freq-item { display: flex; flex-direction: column; gap: 4px; }
+.freq-item .freq-label { color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; font-size: 10px; }
+.freq-item .freq-value { color: var(--text); font-weight: 700; font-size: 16px; }
+.freq-item .freq-value strong { color: var(--accent); font-weight: 800; font-family: 'Big Shoulders Display', sans-serif; font-size: 22px; }
+
+/* ============ WEEK STRIP ============ */
+.week-section { padding: 48px 0 32px; }
+.section-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 28px; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.section-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.15em; margin-bottom: 6px; }
+.section-title { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 48px; letter-spacing: -0.02em; line-height: 1; }
+.section-aside { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; }
+.week-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.day-card { background: var(--bg-card); border: 1px solid var(--line); padding: 20px 14px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; text-align: left; font-family: inherit; color: inherit; }
+.day-card:hover { border-color: var(--line-bright); transform: translateY(-2px); background: var(--bg-elevated); }
+.day-card.active { border-color: var(--accent); background: var(--bg-elevated); box-shadow: var(--shadow-glow); }
+.day-card.today::before { content: 'TODAY'; position: absolute; top: 8px; right: 8px; font-family: 'JetBrains Mono', monospace; font-size: 8px; background: var(--accent); color: var(--bg); padding: 2px 5px; font-weight: 700; letter-spacing: 0.1em; border-radius: 2px; }
+.day-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; }
+.day-icon { font-size: 24px; margin-bottom: 10px; line-height: 1; }
+.day-icon-stack { display: flex; gap: 6px; font-size: 22px; margin-bottom: 10px; line-height: 1; }
+.day-type { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 19px; letter-spacing: -0.01em; text-transform: uppercase; margin-bottom: 4px; line-height: 1.05; }
+.day-focus { font-size: 11px; color: var(--text-faint); }
+.day-card[data-type="bb-push"] .day-type { color: var(--push); }
+.day-card[data-type="pull"] .day-type { color: var(--pull); }
+.day-card[data-type="pump-bb"] .day-type { color: var(--push); }
+.day-card[data-type="bb-pull"] .day-type { color: var(--pull); }
+.day-card[data-type="legs"] .day-type { color: var(--legs); }
+.day-card[data-type="sculpt"] .day-type { color: var(--sculpt); }
+.day-card[data-type="rest"] .day-type { color: var(--rest); }
+.day-card[data-type="bb-push"].active { border-color: var(--push); }
+.day-card[data-type="pull"].active { border-color: var(--pull); }
+.day-card[data-type="pump-bb"].active { border-color: var(--push); }
+.day-card[data-type="bb-pull"].active { border-color: var(--pull); }
+.day-card[data-type="legs"].active { border-color: var(--legs); }
+.day-card[data-type="sculpt"].active { border-color: var(--sculpt); }
+.day-card[data-type="rest"].active { border-color: var(--rest); }
+
+/* ============ DAY DETAIL ============ */
+.day-detail { padding: 32px 0 80px; display: none; animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.day-detail.visible { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.detail-header { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; padding-bottom: 32px; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+.detail-title-block .day-marker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+.detail-title { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: clamp(56px, 7vw, 110px); letter-spacing: -0.03em; line-height: 0.85; margin-bottom: 16px; }
+.detail-subtitle { font-size: 16px; color: var(--text-dim); max-width: 520px; line-height: 1.5; }
+.detail-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.meta-item { background: var(--bg-card); border-left: 2px solid var(--accent); padding: 14px 18px; }
+.meta-item .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+.meta-item .value { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 24px; letter-spacing: -0.01em; }
+
+/* Phase bar */
+.phase-bar { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; background: var(--bg-card); border: 1px solid var(--line); padding: 16px 20px; margin-bottom: 32px; }
+.phase { display: flex; align-items: center; gap: 10px; }
+.phase-icon { font-size: 22px; width: 36px; height: 36px; background: var(--bg-elevated); border: 1px solid var(--line-bright); display: grid; place-items: center; border-radius: 50%; }
+.phase-text { display: flex; flex-direction: column; }
+.phase-text .label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.15em; text-transform: uppercase; }
+.phase-text .name { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: -0.005em; text-transform: uppercase; }
+.phase-arrow { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+
+/* ============ SECTION BLOCKS ============ */
+.block { margin-bottom: 32px; background: var(--bg-card); border: 1px solid var(--line); overflow: hidden; }
+.block-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; cursor: pointer; transition: background 0.2s; user-select: none; background: var(--bg-card); border: none; width: 100%; font-family: inherit; color: inherit; text-align: left; gap: 16px; }
+.block-head:hover { background: var(--bg-elevated); }
+.block-head-left { display: flex; align-items: center; gap: 16px; flex: 1; }
+.block-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.1em; width: 28px; flex-shrink: 0; }
+.block-title { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: -0.01em; }
+.block-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; flex-shrink: 0; }
+.block-toggle { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-bright); display: grid; place-items: center; transition: all 0.3s; font-size: 14px; color: var(--text-dim); flex-shrink: 0; }
+.block.expanded .block-toggle { background: var(--accent); border-color: var(--accent); color: var(--bg); transform: rotate(45deg); }
+.block-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.block.expanded .block-body { max-height: 8000px; }
+.block-content { padding: 0 24px 24px; border-top: 1px solid var(--line); padding-top: 24px; }
+
+/* ============ EXERCISE CARDS ============ */
+.exercise-list { display: flex; flex-direction: column; gap: 12px; }
+.exercise { background: var(--bg); border: 1px solid var(--line); overflow: hidden; transition: border-color 0.2s; }
+.exercise:hover { border-color: var(--line-bright); }
+.exercise-head { display: grid; grid-template-columns: auto 1fr auto auto; gap: 16px; align-items: center; padding: 18px 20px; cursor: pointer; user-select: none; }
+.exercise-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); font-weight: 500; letter-spacing: 0.08em; width: 24px; }
+.exercise-info { display: flex; flex-direction: column; gap: 2px; }
+.exercise-name { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.005em; line-height: 1.1; }
+.exercise-target { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; }
+.exercise-volume { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text); background: var(--bg-elevated); padding: 4px 10px; border-radius: 100px; font-weight: 500; }
+.exercise-arrow { width: 24px; height: 24px; display: grid; place-items: center; color: var(--text-faint); transition: transform 0.3s; font-size: 16px; }
+.exercise.open .exercise-arrow { transform: rotate(180deg); color: var(--accent); }
+.exercise-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.exercise.open .exercise-body { max-height: 1500px; }
+.exercise-detail { padding: 4px 20px 20px; border-top: 1px solid var(--line); padding-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.detail-block-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.detail-block-title::before { content: ''; width: 12px; height: 1px; background: var(--accent); }
+.cue-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+.cue-list li { padding-left: 16px; position: relative; }
+.cue-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+.weight-suggest { display: flex; flex-direction: column; gap: 8px; }
+.weight-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+.weight-row:last-child { border: none; }
+.weight-row .level { color: var(--text-faint); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.weight-row .weight { color: var(--text); font-weight: 500; font-family: 'JetBrains Mono', monospace; }
+
+/* ============ STRETCH SECTION ============ */
+.stretch-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stretch-item { background: var(--bg); border: 1px solid var(--line); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.stretch-item .name { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: -0.005em; }
+.stretch-item .duration { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.05em; }
+.stretch-item .desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+/* ============ NECK BLOCK ============ */
+.neck-block { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%); border: 1px solid var(--line); border-left: 3px solid var(--accent); position: relative; }
+.neck-block::before { content: '🛡'; position: absolute; top: 50%; right: 20px; transform: translateY(-50%); font-size: 32px; opacity: 0.15; pointer-events: none; }
+.neck-block .block-title { color: var(--accent); }
+.neck-exercises { display: flex; flex-direction: column; gap: 12px; }
+.neck-ex { background: var(--bg); border: 1px solid var(--line); padding: 18px 20px; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
+.neck-ex-num { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 36px; line-height: 0.85; color: var(--accent); letter-spacing: -0.04em; width: 36px; }
+.neck-ex-info h6 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.005em; text-transform: uppercase; margin-bottom: 4px; line-height: 1.05; }
+.neck-ex-info .desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+.neck-ex-volume { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text); background: var(--bg-elevated); padding: 6px 12px; border-radius: 100px; font-weight: 500; white-space: nowrap; }
+.neck-progression { background: var(--bg); border: 1px dashed var(--line-bright); padding: 14px 18px; margin-top: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.neck-prog-item { text-align: center; font-family: 'JetBrains Mono', monospace; }
+.neck-prog-item .label { font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.neck-prog-item .value { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent); letter-spacing: -0.01em; }
+
+/* ============ REST DAY ============ */
+.rest-display { text-align: center; padding: 80px 0; }
+.rest-display .big { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: clamp(80px, 14vw, 200px); color: var(--rest); letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 24px; }
+.rest-display .quote { font-size: 18px; color: var(--text-dim); max-width: 480px; margin: 0 auto 32px; line-height: 1.5; font-style: italic; }
+.rest-tips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 720px; margin: 0 auto; }
+.rest-tip { background: var(--bg-card); border: 1px solid var(--line); padding: 20px; text-align: left; }
+.rest-tip h4 { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+.rest-tip p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+/* ============ FOUNDATION ============ */
+.foundation { padding: 80px 0; border-top: 1px solid var(--line); }
+.foundation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.foundation-card { background: var(--bg-card); border: 1px solid var(--line); padding: 28px; position: relative; transition: transform 0.3s; }
+.foundation-card:hover { transform: translateY(-4px); border-color: var(--line-bright); }
+.foundation-icon { width: 48px; height: 48px; background: var(--bg-elevated); border: 1px solid var(--line-bright); display: grid; place-items: center; font-size: 22px; margin-bottom: 20px; transform: rotate(-4deg); }
+.foundation-card h3 { font-family: 'Big Shoulders Display', sans-serif; font-weight: 800; font-size: 22px; margin-bottom: 12px; letter-spacing: -0.01em; text-transform: uppercase; }
+.foundation-card p { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 16px; }
+.foundation-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.foundation-list li { font-size: 12px; color: var(--text); padding: 8px 0; border-bottom: 1px dashed var(--line); display: flex; justify-content: space-between; }
+.foundation-list li:last-child { border: none; }
+.foundation-list li span:first-child { color: var(--text-dim); }
+.foundation-list li span:last-child { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); }
+
+/* ============ FOOTER ============ */
+.footer { padding: 60px 0 80px; border-top: 1px solid var(--line); text-align: center; }
+.footer-mark { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 96px; letter-spacing: -0.04em; background: linear-gradient(180deg, var(--text) 0%, transparent 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; line-height: 0.9; }
+.footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); letter-spacing: 0.2em; text-transform: uppercase; }
+
+/* ============ ANIMATIONS ============ */
+[data-reveal] { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+[data-reveal].in { opacity: 1; transform: translateY(0); }
+
+/* ============ MOBILE ============ */
+@media (max-width: 900px) {
+  .container { padding: 0 20px; }
+  .hero { padding: 48px 0 32px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero::before { font-size: 180px; right: -80px; }
+  .week-strip { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .day-card { padding: 14px 6px; }
+  .day-icon { font-size: 20px; margin-bottom: 8px; }
+  .day-icon-stack { font-size: 16px; gap: 3px; margin-bottom: 8px; }
+  .day-type { font-size: 12px; }
+  .day-focus { display: none; }
+  .day-name { font-size: 9px; margin-bottom: 8px; letter-spacing: 0.08em; }
+  .detail-header { grid-template-columns: 1fr; gap: 24px; }
+  .exercise-detail { grid-template-columns: 1fr; gap: 16px; }
+  .stretch-list { grid-template-columns: 1fr; }
+  .foundation-grid { grid-template-columns: 1fr; }
+  .rest-tips { grid-template-columns: 1fr; }
+  .section-title { font-size: 32px; }
+  .footer-mark { font-size: 56px; }
+  .hero-meta { flex-wrap: wrap; gap: 16px; }
+  .exercise-head { grid-template-columns: auto 1fr auto; gap: 10px; }
+  .exercise-arrow { display: none; }
+  .freq-banner { grid-template-columns: 1fr; gap: 12px; }
+  .phase-bar { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+  .phase-arrow { transform: rotate(90deg); }
+  .block-head { gap: 8px; padding: 16px 18px; }
+  .block-meta { font-size: 9px; }
+  .block-content { padding: 0 18px 18px; padding-top: 18px; }
+  .neck-grid { grid-template-columns: 1fr; }
+  .neck-card { grid-template-columns: 1fr; gap: 12px; padding: 20px; }
+  .neck-ex { grid-template-columns: auto 1fr; gap: 12px; padding: 14px 16px; }
+  .neck-ex-volume { grid-column: 1 / -1; justify-self: start; margin-top: 4px; }
+  .neck-progression { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+
+/* ============ LOG SYSTEM ============ */
+.log-btn {
+  background: transparent;
+  border: 1px solid var(--line-bright);
+  color: var(--text-faint);
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  display: grid; place-items: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.log-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--orange-dim, rgba(255,73,35,0.08)); }
+.log-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(255,73,35,0.12); }
+
+.log-section {
+  border-top: 1px solid var(--line);
+  background: var(--bg-soft);
+  padding: 16px 20px;
+}
+.log-head-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.log-head-label::before { content: ''; width: 16px; height: 1px; background: var(--accent); }
+
+.log-history { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.log-empty { font-size: 12px; color: var(--text-faint); font-family: 'JetBrains Mono', monospace; padding: 8px 0; }
+.log-entry {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.log-entry:first-child { border-color: var(--accent); }
+.log-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); }
+.log-weight { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text); font-weight: 500; }
+.log-reps { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); text-align: right; }
+.log-entry:first-child .log-date { color: var(--accent); }
+
+.log-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }
+.log-input {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line-bright);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.log-input:focus { border-color: var(--accent); }
+.log-input::placeholder { color: var(--text-faint); }
+.log-save-btn {
+  background: var(--accent);
+  border: none;
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+.log-save-btn:hover { opacity: 0.85; }
+.log-saved-flash { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); padding: 4px 0; }
+
+/* Fortschritt Page */
+.progress-page-head {
+  padding: 48px 0 32px;
+}
+.progress-empty {
+  text-align: center;
+  padding: 80px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-faint);
+  line-height: 1.8;
+}
+.progress-empty .big { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 64px; color: var(--bg-elevated); display: block; margin-bottom: 16px; }
+.progress-grid { display: flex; flex-direction: column; gap: 16px; padding-bottom: 80px; }
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.progress-card:hover { border-color: var(--line-bright); }
+.progress-card-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+}
+.progress-card-name { font-family: 'Big Shoulders Display', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.005em; }
+.progress-card-day { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+.progress-card-last { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent); font-weight: 700; text-align: right; }
+.progress-card-last-label { font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
+.progress-history-mini { padding: 0 20px 16px; display: flex; flex-direction: column; gap: 4px; }
+.progress-row-mini {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--line);
+  color: var(--text-dim);
+}
+.progress-row-mini:last-child { border: none; }
+.progress-row-mini .pd { color: var(--text-faint); font-size: 10px; }
+.progress-trend { font-size: 10px; color: var(--text-faint); padding: 0 20px 12px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+.progress-trend.up { color: #22c55e; }
+.progress-trend.same { color: var(--text-faint); }
+.clear-log-btn {
+  background: transparent;
+  border: 1px solid var(--line-bright);
+  color: var(--text-faint);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+.clear-log-btn:hover { border-color: #ef4444; color: #ef4444; }
+
+@media (max-width: 900px) {
+  .log-form { grid-template-columns: 1fr 1fr; }
+  .log-save-btn { grid-column: 1 / -1; }
+  .log-entry { grid-template-columns: 48px 1fr 1fr; }
+  .progress-card-head { grid-template-columns: 1fr; }
+  .progress-card-last { text-align: left; }
+  .progress-card-last-label { text-align: left; }
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--line-bright); border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo">
+      <div class="logo-mark"></div>
+      <span>SHIFT/<span style="color:var(--text-faint)">M</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="nav-week mono">PROGRAM v4.1 · UPDATED 05.26</div>
+      <button onclick="switchPage('progress')" id="nav-progress-btn" style="background:transparent;border:1px solid var(--line-bright);color:var(--text-faint);font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 14px;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.2s;border-radius:4px" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--line-bright)';this.style.color='var(--text-faint)'">📊 LOG</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div data-reveal>
+        <div class="hero-tag mono">Active Program · Marvin · 16</div>
+        <h1 class="hero-title display">THE<br><span class="accent">SHIFT</span></h1>
+        <p class="hero-sub">Strength-Hypertrophy gebaut um Basketball Mo/Mi/Do. 6 Lifting-Sessions, schwere Compounds 6-8 Reps, RIR 1-2. Echte 2× Brust-Frequenz. Brutal effizient.</p>
+        <div class="hero-meta mono">
+          <span><strong>1.84m</strong> HEIGHT</span>
+          <span><strong>65kg</strong> CURRENT</span>
+          <span><strong>70kg</strong> TARGET</span>
+        </div>
+      </div>
+      <div class="stats-card" data-reveal>
+        <h3 class="mono">// SESSION CONFIG</h3>
+        <div class="stat-row">
+          <span class="stat-label">Bench 500</span>
+          <span class="stat-value">✓<span class="stat-unit">DOMYOS</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Hanteln total</span>
+          <span class="stat-value">2×20<span class="stat-unit">KG</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Lifting / Wk</span>
+          <span class="stat-value">6<span class="stat-unit">SESS</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Basketball / Wk</span>
+          <span class="stat-value">3<span class="stat-unit">×</span></span>
+        </div>
+        <div class="progress-block">
+          <div class="progress-head mono">
+            <span class="label">Goal Progress</span>
+            <span class="value">+0 / +5 KG</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="freq-banner" data-reveal>
+      <h4>Volume Hits</h4>
+      <div class="freq-list">
+        <div class="freq-item"><span class="freq-label">Brust</span><span class="freq-value"><strong>2×</strong></span></div>
+        <div class="freq-item"><span class="freq-label">Rücken</span><span class="freq-value"><strong>3×</strong></span></div>
+        <div class="freq-item"><span class="freq-label">Schultern</span><span class="freq-value"><strong>3×</strong></span></div>
+        <div class="freq-item"><span class="freq-label">Arme</span><span class="freq-value"><strong>2×</strong></span></div>
+        <div class="freq-item"><span class="freq-label">Core</span><span class="freq-value"><strong>3×</strong></span></div>
+        <div class="freq-item"><span class="freq-label">Beine</span><span class="freq-value"><strong>1× + BB</strong></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEEK STRIP -->
+<section class="week-section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div><div class="section-num mono">/// 01</div><div class="section-title">DIE WOCHE</div></div>
+      <div class="section-aside mono">Klick einen Tag</div>
+    </div>
+    <div class="week-strip" id="weekStrip" data-reveal>
+      <button class="day-card active" data-type="bb-push" data-day="mo">
+        <div class="day-name mono">Mo</div>
+        <div class="day-icon-stack">🏀<span style="opacity:.4">→</span>💪</div>
+        <div class="day-type">BB + Push</div>
+        <div class="day-focus">Brust · Schulter · Tri</div>
+      </button>
+      <button class="day-card" data-type="pull" data-day="di">
+        <div class="day-name mono">Di</div>
+        <div class="day-icon">🦅</div>
+        <div class="day-type">Pull A</div>
+        <div class="day-focus">Rücken · Bizeps · Core</div>
+      </button>
+      <button class="day-card" data-type="pump-bb" data-day="mi">
+        <div class="day-name mono">Mi</div>
+        <div class="day-icon-stack">💪<span style="opacity:.4">→</span>🏀</div>
+        <div class="day-type">Push B + BB</div>
+        <div class="day-focus">Brust · Light · Pre-BB</div>
+      </button>
+      <button class="day-card" data-type="bb-pull" data-day="do">
+        <div class="day-name mono">Do</div>
+        <div class="day-icon-stack">🏀<span style="opacity:.4">→</span>🦅</div>
+        <div class="day-type">BB + Pull</div>
+        <div class="day-focus">Back-Width · Curls</div>
+      </button>
+      <button class="day-card" data-type="legs" data-day="fr">
+        <div class="day-name mono">Fr</div>
+        <div class="day-icon">🦵</div>
+        <div class="day-type">Legs</div>
+        <div class="day-focus">Quads · Glutes · Core</div>
+      </button>
+      <button class="day-card" data-type="sculpt" data-day="sa">
+        <div class="day-name mono">Sa</div>
+        <div class="day-icon">🎯</div>
+        <div class="day-type">Sculpt</div>
+        <div class="day-focus">Core · Back · V-Build</div>
+      </button>
+      <button class="day-card" data-type="rest" data-day="so">
+        <div class="day-name mono">So</div>
+        <div class="day-icon">😴</div>
+        <div class="day-type">Rest</div>
+        <div class="day-focus">Recovery</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- ====== MO: BB + PUSH ====== -->
+<section class="day-detail visible" data-day-detail="mo">
+  <div class="detail-header">
+    <div class="detail-title-block">
+      <div class="day-marker mono">Day 01 · Basketball + Push · ~135 MIN total</div>
+      <h2 class="detail-title display">BB<br>+ <span style="color:var(--push)">PUSH</span></h2>
+      <p class="detail-subtitle">Erst Basketball — voll spielen. Danach Push: hier baust du Brust, Schultern und Trizeps. Hauptsession der Woche für V-Form. Neu: Face Pulls für Rear Delts + Seated Tricep Extensions.</p>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item"><div class="label mono">BB Time</div><div class="value">~90 min</div></div>
+      <div class="meta-item"><div class="label mono">Push Time</div><div class="value">~50 min</div></div>
+      <div class="meta-item"><div class="label mono">Push Sets</div><div class="value">23 sets</div></div>
+      <div class="meta-item"><div class="label mono">Rest</div><div class="value">90 sec</div></div>
+    </div>
+  </div>
+
+  <div class="phase-bar">
+    <div class="phase"><div class="phase-icon">🏀</div><div class="phase-text"><span class="label mono">Phase 1</span><span class="name">Basketball</span></div></div>
+    <span class="phase-arrow mono">→ 10 min Snack & Rest →</span>
+    <div class="phase"><div class="phase-icon">💪</div><div class="phase-text"><span class="label mono">Phase 2</span><span class="name">Push Workout</span></div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">01</span><span class="block-title">Basketball Pre/Post</span></div>
+      <span class="block-meta mono">15 MIN total</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">10 MIN PRE</span><span class="name">Pre-Game Activation</span><span class="desc">Joggen + Dynamic Warmup, Hip & Ankle Mobility, 10 Squats + 10 Glute Bridges + 5 Push-ups, dann Layups einschießen.</span></div>
+        <div class="stretch-item"><span class="duration mono">5 MIN POST</span><span class="name">Post-Game Recovery</span><span class="desc">Walking 1 min, Lower Body Stretch (Pigeon, Hamstring je 30s/Seite), 500ml Wasser. Danach SOFORT Push starten — nicht abkühlen lassen, du bist schon warm.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">02</span><span class="block-title">Push Warmup</span></div>
+      <span class="block-meta mono">5 MIN · Schon warm</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Schulter-Mobility</span><span class="desc">Arm Circles 10 each, Wall Slides 8 reps, Schulterblätter aktivieren. Du bist schon warm vom BB, also kurz.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Band Pull-Aparts</span><span class="desc">2 × 12 mit leichtem Band. Rear Delts wachküssen für Drücken.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Bench Press Aufwärm-Set</span><span class="desc">1 Set mit nur den Bars (4kg total, 10 reps), 1 Set mit halbem Arbeitsgewicht (8 reps). Niemals kalt schwer drücken.</span></div>
+        <div class="stretch-item"><span class="duration mono">⚠ NOTE</span><span class="name">Wenn Beine zittern</span><span class="desc">Wenn nach BB die Beine wirklich müde sind: setze dich für die ersten 2 Übungen statt zu stehen. Form > Ego.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">03</span><span class="block-title">Push Main Workout</span></div>
+      <span class="block-meta mono">7 EXERCISES · 23 SETS</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A1</span>
+            <div class="exercise-info"><div class="exercise-name">Flat Dumbbell Bench Press</div><div class="exercise-target mono">Brust mid · Trizeps · vord. Schulter</div></div>
+            <span class="exercise-volume mono">4 × 6-8</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Auf Bench flach legen, Hanteln über Brust mit Handflächen weg</li>
+                <li>Schulterblätter zusammenziehen, leicht nach unten — die ganze Zeit</li>
+                <li>Langsam runter zur Brustmitte (3 Sek), kurz pausieren, explosiv hoch</li>
+                <li>Ellbogen ~45° vom Körper, NICHT direkt T-shape</li>
+                <li>Letzte 2 Reps müssen schwer sein — RIR 1-2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 10kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 16-18kg</span></div>
+                <div class="weight-row"><span class="level">PROGRESSION</span><span class="weight">+1kg / 2 wks</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A2</span>
+            <div class="exercise-info"><div class="exercise-name">Incline Dumbbell Press (30°)</div><div class="exercise-target mono">Brust oben · KEY für V-Form</div></div>
+            <span class="exercise-volume mono">3 × 8-10</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Bench auf 30° (zweite Position) — nicht steiler, sonst wird's Schulter</li>
+                <li>Hanteln auf Höhe der oberen Brust runter, leicht nach innen drücken oben</li>
+                <li>Diese Übung ist GOLD für oberen Brustkorb → V-Form</li>
+                <li>Volle Range — runter bis Brust spürbar dehnt</li>
+                <li>Tempo: 3 sec runter, 1 sec hoch · RIR 1-2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 8kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 10kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 14kg</span></div>
+                <div class="weight-row"><span class="level">NOTE</span><span class="weight">Form > Weight</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A3</span>
+            <div class="exercise-info"><div class="exercise-name">Seated Dumbbell Shoulder Press</div><div class="exercise-target mono">Vord. & seitl. Schulter · Trizeps</div></div>
+            <span class="exercise-volume mono">3 × 8-10</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Bench auf 80° (fast aufrecht), Rücken angedrückt</li>
+                <li>Hanteln auf Schulterhöhe, Ellbogen unter Handgelenken</li>
+                <li>Hochdrücken über Kopf — am höchsten Punkt fast Touch der Hanteln</li>
+                <li>Bauch fest, kein Hohlkreuz · RIR 1-2</li>
+                <li>Wenn die Schulter zwickt: Hanteln neutral halten (Handflächen zueinander)</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 8kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 10kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 14kg</span></div>
+                <div class="weight-row"><span class="level">CAUTION</span><span class="weight">Schulter-safe</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B1</span>
+            <div class="exercise-info"><div class="exercise-name">Lateral Raises</div><div class="exercise-target mono">Seitl. Schulter · KING für Breite · V-Taper</div></div>
+            <span class="exercise-volume mono">4 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>DIE Übung für breite Schultern. Ohne die kein V.</li>
+                <li>Stehen, leicht nach vorn gebeugt, Hanteln vor dem Körper</li>
+                <li>Hanteln seitlich anheben bis Arme parallel zum Boden — Pinky-Tilt (Wasser gießen)</li>
+                <li>NICHT mit Schwung — kontrolliert. Wenn du schwingen musst → zu schwer</li>
+                <li>Lieber leichter mit perfekter Form als schwer mit Schwung</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 5kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 6kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 8-10kg</span></div>
+                <div class="weight-row"><span class="level">RULE</span><span class="weight">Form first</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- NEU: Band Face Pulls -->
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B2</span>
+            <div class="exercise-info"><div class="exercise-name">Band Face Pulls</div><div class="exercise-target mono">Rear Delts · Schulter-Gesundheit · V-Taper</div></div>
+            <span class="exercise-volume mono">3 × 15-20</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Band am Türrahmen auf Kopfhöhe befestigen</li>
+                <li>Band mit beiden Händen greifen, einen Schritt zurücktreten</li>
+                <li>Zu deinem Gesicht ziehen — Hände neben die Ohren, Ellbogen hoch</li>
+                <li>Schulterblätter ZUSAMMEN quetschen am Top, 1 sec halten</li>
+                <li>Hintere Delts + obere Rückenmitte → breite Schultern von der Seite</li>
+                <li>Leichtes Band, saubere Form — nie mit Schwung</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Bands Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">BAND</span><span class="weight">Leicht / Medium</span></div>
+                <div class="weight-row"><span class="level">REPS</span><span class="weight">15-20</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+                <div class="weight-row"><span class="level">WHY</span><span class="weight">Balanciert Drücken</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- NEU: Seated Tricep Extension -->
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C1</span>
+            <div class="exercise-info"><div class="exercise-name">Seated Overhead Tricep Extension</div><div class="exercise-target mono">Trizeps Long Head · Masse · Pump</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Sitzend auf der Bench (aufrecht), eine Hantel mit beiden Händen am oberen Kopf</li>
+                <li>Hantel hinter den Kopf absenken — Ellbogen zeigen nach vorn, NICHT nach außen</li>
+                <li>Ellbogen bleiben fix neben dem Kopf, NUR Unterarme bewegen sich</li>
+                <li>Trizeps am Top voll durchstrecken und anspannen, 1 sec halten</li>
+                <li>Gibt riesigen Pump — Long Head des Trizeps (macht Arme sichtbar dicker)</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 14kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 18-20kg</span></div>
+                <div class="weight-row"><span class="level">CUE</span><span class="weight">Ellbogen fix!</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- Finisher: Diamond Push-ups -->
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C2</span>
+            <div class="exercise-info"><div class="exercise-name">Diamond Push-ups</div><div class="exercise-target mono">Trizeps · Brust innen · FINISHER</div></div>
+            <span class="exercise-volume mono">3 × AMRAP</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Hände eng zusammen, Daumen + Zeigefinger berühren sich (Diamant)</li>
+                <li>Ellbogen eng am Körper — NICHT raus</li>
+                <li>Brust runter zu den Händen, Trizeps brennt</li>
+                <li>Wenn zu schwer: Knie ablegen (kein Schummeln, ehrliche Skalierung)</li>
+                <li>Letzter Satz des Workouts → all-out, bis nichts mehr geht</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">8-15</span></div>
+                <div class="weight-row"><span class="level">SET 2</span><span class="weight">6-12</span></div>
+                <div class="weight-row"><span class="level">SET 3</span><span class="weight">Max</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded neck-block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">04</span><span class="block-title">Neck Block</span></div>
+      <span class="block-meta mono">5 MIN · 1/3 WEEKLY</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="neck-exercises">
+        <div class="neck-ex"><div class="neck-ex-num">01</div><div class="neck-ex-info"><h6>Chin Tucks</h6><div class="desc">Kinn nach hinten ziehen wie ein Doppelkinn — 2 sec halten, lösen. Kopf bleibt gerade. Aktiviert die tiefen Halsmuskeln und korrigiert Vorwärtshaltung.</div></div><div class="neck-ex-volume mono">2 × 12</div></div>
+        <div class="neck-ex"><div class="neck-ex-num">02</div><div class="neck-ex-info"><h6>Weighted Neck Curls</h6><div class="desc">Auf Bench liegen, Kopf hängt über die Kante. Hantelscheibe (mit Tuch gepolstert) auf Stirn halten. Kinn zur Brust ziehen. Slow eccentric: 3-4 sec runter.</div></div><div class="neck-ex-volume mono">3 × 15-20</div></div>
+      </div>
+      <div class="neck-progression">
+        <div class="neck-prog-item"><div class="label">START</div><div class="value">1 KG</div></div>
+        <div class="neck-prog-item"><div class="label">WEEK 4</div><div class="value">2 KG</div></div>
+        <div class="neck-prog-item"><div class="label">WEEK 8</div><div class="value">3 KG</div></div>
+        <div class="neck-prog-item"><div class="label">TARGET</div><div class="value">5 KG</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">05</span><span class="block-title">Cooldown & Stretch</span></div>
+      <span class="block-meta mono">5 MIN · Recovery</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Türrahmen Brust-Stretch</span><span class="desc">Unterarm an Türrahmen, Schritt nach vorn. Brust dehnt — wichtig nach allem Drücken.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Cross-Body Schulter-Stretch</span><span class="desc">Arm vor Brust ziehen, andere Hand zieht Ellbogen rüber. Posterior Delt aufmachen.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Trizeps Overhead Stretch</span><span class="desc">Arm hoch, Ellbogen biegen, andere Hand zieht Ellbogen sanft Richtung Mittellinie.</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== DI: PULL A ====== -->
+<section class="day-detail" data-day-detail="di">
+  <div class="detail-header">
+    <div class="detail-title-block">
+      <div class="day-marker mono">Day 02 · Pull A · ~60 MIN · Frisch</div>
+      <h2 class="detail-title display">PULL<br><span style="color:var(--pull)">DAY A</span></h2>
+      <p class="detail-subtitle">Hauptsession Rücken — schwer und vollständig. Hier baust du die Lat-Breite die den V macht. Kein BB davor — du bist 100% frisch. Neu: Core-Block am Ende (Crunches + Leg Raises auf Schrägbank).</p>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item"><div class="label mono">Duration</div><div class="value">~60 min</div></div>
+      <div class="meta-item"><div class="label mono">Volume</div><div class="value">22 sets</div></div>
+      <div class="meta-item"><div class="label mono">Focus</div><div class="value">Lats / Biceps</div></div>
+      <div class="meta-item"><div class="label mono">Rest</div><div class="value">90 sec</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">00</span><span class="block-title">Warmup</span></div>
+      <span class="block-meta mono">7 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">3 MIN</span><span class="name">Cardio Activation</span><span class="desc">Jumping Jacks → Mountain Climbers → Inchworm. Puls hoch.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Cat-Cow + T-Spine Mob</span><span class="desc">10x Cat-Cow am Boden, Thread the Needle 5x pro Seite. Brustwirbel mobilisieren — entscheidend für Lat-Aktivierung.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Band Face-Pulls</span><span class="desc">2 × 12 mit mittlerem Band. Rear Delts und obere Rückenmitte wachküssen.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Lat Stretch</span><span class="desc">Hände an Bench, hocken & sich nach hinten ziehen. Lats voll dehnen 30s × 2.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">01</span><span class="block-title">Main Workout</span></div>
+      <span class="block-meta mono">7 EX · 22 SETS</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A1</span>
+            <div class="exercise-info"><div class="exercise-name">Bent-Over Dumbbell Row</div><div class="exercise-target mono">Rücken-Mitte · Lats · Rear Delts</div></div>
+            <span class="exercise-volume mono">4 × 6-8</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Hüfte nach hinten, Oberkörper ~45° vorgebeugt — flacher Rücken</li>
+                <li>Beide Hanteln zusammen Richtung Bauchnabel ziehen</li>
+                <li>Schulterblätter zusammendrücken am Top, 1 sec halten</li>
+                <li>Langsam runter, voller Stretch · RIR 1-2</li>
+                <li>Knie leicht gebeugt, Bauch fest — kein Wackeln</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 10kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 16-18kg</span></div>
+                <div class="weight-row"><span class="level">CUE</span><span class="weight">Squeeze!</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A2</span>
+            <div class="exercise-info"><div class="exercise-name">Single-Arm Row (Knee on Bench)</div><div class="exercise-target mono">Lats · Pro Seite · DEPTH</div></div>
+            <span class="exercise-volume mono">3 × 8 / Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Linkes Knie + linke Hand auf Bench, rechtes Bein steht</li>
+                <li>Rechte Hand mit Hantel hängt voll runter — Lat zieht</li>
+                <li>Hantel zur Hüfte ziehen, Ellbogen am Körper</li>
+                <li>Am Top kurz halten — Lat squeezen</li>
+                <li>Volle Range nutzen, Hantel ganz runter · RIR 1-2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 14kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 16kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 18-20kg</span></div>
+                <div class="weight-row"><span class="level">FOCUS</span><span class="weight">Lat Stretch</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A3</span>
+            <div class="exercise-info"><div class="exercise-name">Dumbbell Pullover</div><div class="exercise-target mono">Lats · Brust · KEY für V-Form</div></div>
+            <span class="exercise-volume mono">3 × 8-10</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Quer auf der Bench liegen (nur oberer Rücken auf Bench, Po hängt)</li>
+                <li>Eine Hantel mit beiden Händen am Hantelkopf greifen</li>
+                <li>Hantel über Brust, leichte Beuge in Ellbogen — die ganze Zeit</li>
+                <li>Langsam hinter den Kopf senken bis voller Lat-Stretch</li>
+                <li>Mit Lats zurückziehen, NICHT mit Trizeps</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 14kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 16-18kg</span></div>
+                <div class="weight-row"><span class="level">FEEL</span><span class="weight">Lats burning</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B1</span>
+            <div class="exercise-info"><div class="exercise-name">Reverse Fly (Chest on Incline)</div><div class="exercise-target mono">Rear Delts · Posture</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Bench auf 45°, Brust gegen Lehne (umgekehrt)</li>
+                <li>Hanteln hängen vor dir, leichte Beuge in Ellbogen</li>
+                <li>Hanteln seitlich nach oben fliegen — wie Reverse Schmetterling</li>
+                <li>Schulterblätter ZUSAMMEN drücken am Top, 1 sec halten</li>
+                <li>Posture-Saver: gegen alles Sitzen in der Schule</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 5kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 6kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 8-9kg</span></div>
+                <div class="weight-row"><span class="level">RULE</span><span class="weight">Form > Heavy</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B2</span>
+            <div class="exercise-info"><div class="exercise-name">Dumbbell Shrugs</div><div class="exercise-target mono">Trapezius · Hals-Stabilität</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Stehen, Hanteln hängen seitlich</li>
+                <li>Schultern hoch zu den Ohren ziehen — dann 1 sec halten</li>
+                <li>NICHT rotieren, gerade hoch und runter</li>
+                <li>Schwer machen — Trapse tragen viel</li>
+                <li>Auch wichtig für Neck Prehab im Basketball</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 14kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 16kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 20kg</span></div>
+                <div class="weight-row"><span class="level">TEMPO</span><span class="weight">2-1-2</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C1</span>
+            <div class="exercise-info"><div class="exercise-name">Incline Bicep Curl</div><div class="exercise-target mono">Bizeps long head · Stretch</div></div>
+            <span class="exercise-volume mono">3 × 8-10</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Bench auf 45°, dich draufsetzen mit Rücken angedrückt</li>
+                <li>Arme hängen vom Schultergelenk runter — Bizeps voll gedehnt</li>
+                <li>Curlen — Ellbogen bleibt fix, NUR der Unterarm bewegt sich</li>
+                <li>Top: Hand voll zur Schulter, Bizeps anspannen</li>
+                <li>Slow eccentric: 3 sec runter · RIR 1-2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 7kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 9kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">PEAK</span><span class="weight">SQUEEZE!</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C2</span>
+            <div class="exercise-info"><div class="exercise-name">Hammer Curl</div><div class="exercise-target mono">Brachialis · Forearms · Width</div></div>
+            <span class="exercise-volume mono">3 × 8-10</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Stehen, Hanteln neutral halten (Daumen zeigen nach oben)</li>
+                <li>Curlen ohne Drehen — wie ein Hammer — 12 pro Arm</li>
+                <li>Trifft Brachialis (drunter) → drückt Bizeps nach oben → dickere Arme</li>
+                <li>Beide gleichzeitig oder alternierend, beides okay · RIR 1-2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 8kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 10kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 14kg</span></div>
+                <div class="weight-row"><span class="level">FORM</span><span class="weight">No swing</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <!-- NEU: Core Block auf Di -->
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">02</span><span class="block-title">Core Block</span></div>
+      <span class="block-meta mono">3 EX · Schrägbank</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">D1</span>
+            <div class="exercise-info"><div class="exercise-name">Crunches (Schrägbank)</div><div class="exercise-target mono">Obere Bauchmuskeln · Basis</div></div>
+            <span class="exercise-volume mono">3 × 20</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Schrägbank mit Beinhalterung, Kopf zeigt leicht nach unten</li>
+                <li>Hände locker hinter dem Kopf oder vor der Brust kreuzen</li>
+                <li>Nur den oberen Rücken abheben — NICHT komplett aufsitzen</li>
+                <li>Bauch am Top anspannen, 1 sec halten, langsam zurück</li>
+                <li>Schrägbank = mehr Range als auf dem Boden → mehr Wachstum</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">20 reps</span></div>
+                <div class="weight-row"><span class="level">SET 2</span><span class="weight">20 reps</span></div>
+                <div class="weight-row"><span class="level">SET 3</span><span class="weight">Max</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">D2</span>
+            <div class="exercise-info"><div class="exercise-name">Leg Raises (Schrägbank)</div><div class="exercise-target mono">Untere Bauchmuskeln · Lower Abs</div></div>
+            <span class="exercise-volume mono">3 × 15</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Schrägbank, Kopf oben, Beine hängen über das untere Ende</li>
+                <li>Beine zusammen, leicht gebeugt oder gestreckt</li>
+                <li>Beine langsam nach oben bis ~90° heben</li>
+                <li>Kontrolliert runter — NICHT auf die Bench ablegen, Spannung halten</li>
+                <li>Trifft den unteren Bauch — schwieriger als Crunches, aber wichtiger</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">15 reps</span></div>
+                <div class="weight-row"><span class="level">SET 2</span><span class="weight">12-13</span></div>
+                <div class="weight-row"><span class="level">SET 3</span><span class="weight">10+</span></div>
+                <div class="weight-row"><span class="level">FORM</span><span class="weight">Slow eccentric</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">D3</span>
+            <div class="exercise-info"><div class="exercise-name">Bicycle Crunches</div><div class="exercise-target mono">Schräge + obere Bauch</div></div>
+            <span class="exercise-volume mono">3 × 20</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Auf Boden oder am Ende der Bench, Hände locker hinter Kopf</li>
+                <li>Knie zur Brust, abwechselnd: rechtes Knie + linker Ellbogen</li>
+                <li>Anderes Bein streckt sich gleichzeitig aus</li>
+                <li>Drehung kommt aus dem CORE, nicht aus dem Hals</li>
+                <li>Langsam und kontrolliert — 20 saubere Reps > 40 chaotische</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1-3</span><span class="weight">20 (10/Seite)</span></div>
+                <div class="weight-row"><span class="level">TEMPO</span><span class="weight">Slow</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">30 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">03</span><span class="block-title">Cooldown & Stretch</span></div>
+      <span class="block-meta mono">5 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Lat Stretch (kneeling)</span><span class="desc">Auf Knien vor Bench, Arme oben drauf, Po hinten weg. Lats voll dehnen.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Cross-Body Bizeps Stretch</span><span class="desc">Arm gerade nach hinten an Wand, Körper wegdrehen. Bizeps und Brust öffnen.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s</span><span class="name">Cobra Pose</span><span class="desc">Auf Bauch liegen, Hände unter Schultern, Brust hoch. Bauch dehnen nach dem Core-Block.</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== MI: PUSH B + BB ====== -->
+<section class="day-detail" data-day-detail="mi">
+  <div class="detail-header">
+    <div class="detail-title-block">
+      <div class="day-marker mono">Day 03 · Push B + Basketball · ~125 MIN total</div>
+      <h2 class="detail-title display">PUSH B<br>+ <span style="color:var(--basketball)">BB</span></h2>
+      <p class="detail-subtitle">Zweiter Push-Tag — light, mit Fokus auf Brust und Schulter-Volumen. Kein schweres Overhead Pressing vor BB. Neu: Seated Tricep Extension statt Kickback, Pushups als richtiger Finisher.</p>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item"><div class="label mono">Push Time</div><div class="value">~35 min</div></div>
+      <div class="meta-item"><div class="label mono">BB Time</div><div class="value">~90 min</div></div>
+      <div class="meta-item"><div class="label mono">Push Sets</div><div class="value">15 sets</div></div>
+      <div class="meta-item"><div class="label mono">Rest</div><div class="value">60 sec</div></div>
+    </div>
+  </div>
+
+  <div class="phase-bar">
+    <div class="phase"><div class="phase-icon">💪</div><div class="phase-text"><span class="label mono">Phase 1</span><span class="name">Push B Workout</span></div></div>
+    <span class="phase-arrow mono">→ 15 min Pause + Snack →</span>
+    <div class="phase"><div class="phase-icon">🏀</div><div class="phase-text"><span class="label mono">Phase 2</span><span class="name">Basketball</span></div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">00</span><span class="block-title">Quick Warmup</span></div>
+      <span class="block-meta mono">4 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Arm Circles + Wall Slides</span><span class="desc">10x vorwärts, 10x rückwärts, dann 8 Wall Slides. Schultergelenk auf Betrieb.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Band Pull-Aparts</span><span class="desc">2 × 12 mit leichtem Band. Aktiviert Rear Delts — wichtig für saubere Press-Form.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Cobra-to-Child Flow</span><span class="desc">5x Cobra (Brust öffnen) → Child Pose (Lats lockern). Brust und Brustkorb vorbereiten.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Aufwärm-Set</span><span class="desc">Bei Incline Press: 1 Set mit halbem Arbeitsgewicht (8 reps). Brust auf Spannung bringen.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">01</span><span class="block-title">Push B Workout</span></div>
+      <span class="block-meta mono">5 EX · 15 SETS · CHEST FOCUS</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A1</span>
+            <div class="exercise-info"><div class="exercise-name">Incline DB Press (45°) — Light</div><div class="exercise-target mono">Brust oben · 2. Brust-Hit · Volume</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Bench heute STEILER (45°) — anderer Reiz als Mo (30°)</li>
+                <li>Leichter als Mo: Fokus auf saubere Form, Pump und Volume</li>
+                <li>Hypertrophy-Range (10-12) → mehr Wachstum bei weniger Belastung</li>
+                <li>Tempo: 3 sec runter, 1 sec hoch — slow eccentric</li>
+                <li>Stop 2 Reps vor Versagen — Würfe brauchen frische Schulter</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 7kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 8kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 10-12kg</span></div>
+                <div class="weight-row"><span class="level">RIR</span><span class="weight">2 in tank</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A2</span>
+            <div class="exercise-info"><div class="exercise-name">Dumbbell Flys (Flat)</div><div class="exercise-target mono">Brust isolation · STRETCH · Pure Chest</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Auf Bench flach liegen, Hanteln über Brust mit Handflächen zueinander</li>
+                <li>Arme leicht gebeugt — bleiben so die ganze Zeit (kein Press!)</li>
+                <li>Bogen-Bewegung seitlich runter — Brust spürt Stretch</li>
+                <li>Bei Stretch-Punkt 1 sec halten, mit Brust zurückbringen</li>
+                <li>Direkter Brust-Stimulus, schont Schultern → ideal vor BB</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 5kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 6kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 8-9kg</span></div>
+                <div class="weight-row"><span class="level">FORM</span><span class="weight">Slow + stretch</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B1</span>
+            <div class="exercise-info"><div class="exercise-name">Lateral Raises (Light)</div><div class="exercise-target mono">Seitl. Schulter · 2. Volumen-Hit</div></div>
+            <span class="exercise-volume mono">3 × 15</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>BEWUSST leicht halten — 2-3kg pro Hand max heute</li>
+                <li>Hohe Reps, perfekte Form, full Range</li>
+                <li>Pinky-Tilt — als ob du Wasser ausgießt</li>
+                <li>2 Sek hoch, 2 Sek runter, kein Schwung</li>
+                <li>Ziel: Pump in den seitl. Delts, nicht erschöpfen</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">ALWAYS</span><span class="weight">2 × 2-4kg</span></div>
+                <div class="weight-row"><span class="level">RIR</span><span class="weight">3+ in tank</span></div>
+                <div class="weight-row"><span class="level">RULE</span><span class="weight">Pump only</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- Seated Tricep Extension statt Kickback -->
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B2</span>
+            <div class="exercise-info"><div class="exercise-name">Seated Overhead Tricep Extension</div><div class="exercise-target mono">Trizeps Long Head · 2. Hit · Pump</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Sitzend auf Bench, eine Hantel mit beiden Händen am oberen Kopf</li>
+                <li>Hantel hinter den Kopf absenken — Ellbogen nach vorn, nicht außen</li>
+                <li>Ellbogen bleiben fix neben dem Kopf die ganze Zeit</li>
+                <li>Trizeps am Top voll durchstrecken, 1 sec anspannen</li>
+                <li>Leichter als Mo — Fokus auf Pump und Technik</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 10kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 14-16kg</span></div>
+                <div class="weight-row"><span class="level">CUE</span><span class="weight">Ellbogen fix!</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- Push-ups als Finisher -->
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C1</span>
+            <div class="exercise-info"><div class="exercise-name">Push-ups — FINISHER</div><div class="exercise-target mono">Brust · Trizeps · Bis Failure</div></div>
+            <span class="exercise-volume mono">3 × AMRAP</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Standard Push-ups — Hände schulterbreit, Body wie ein Brett</li>
+                <li>Bis echtes Failure — kein vorzeitiges Aufhören</li>
+                <li>Brust voll runter, volle Streckung oben</li>
+                <li>Wenn nicht mehr vollständig → sofort aufhören (saubere Form bis zum Ende)</li>
+                <li>60 sec Pause zwischen Sets — dann wieder all-out</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">Max clean reps</span></div>
+                <div class="weight-row"><span class="level">SET 2</span><span class="weight">Max clean reps</span></div>
+                <div class="weight-row"><span class="level">SET 3</span><span class="weight">All-out</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">60 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded neck-block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">02</span><span class="block-title">Neck Block</span></div>
+      <span class="block-meta mono">5 MIN · 2/3 WEEKLY</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="neck-exercises">
+        <div class="neck-ex"><div class="neck-ex-num">01</div><div class="neck-ex-info"><h6>Chin Tucks</h6><div class="desc">Kinn nach hinten ziehen wie ein Doppelkinn — 2 sec halten, lösen. Kopf bleibt gerade.</div></div><div class="neck-ex-volume mono">2 × 12</div></div>
+        <div class="neck-ex"><div class="neck-ex-num">02</div><div class="neck-ex-info"><h6>Weighted Neck Curls</h6><div class="desc">Auf Bench liegen, Kopf hängt über die Kante. Hantelscheibe (mit Tuch gepolstert) auf Stirn halten. Slow eccentric: 3-4 sec runter.</div></div><div class="neck-ex-volume mono">3 × 15-20</div></div>
+      </div>
+      <div class="neck-progression">
+        <div class="neck-prog-item"><div class="label">START</div><div class="value">1 KG</div></div>
+        <div class="neck-prog-item"><div class="label">WEEK 4</div><div class="value">2 KG</div></div>
+        <div class="neck-prog-item"><div class="label">WEEK 8</div><div class="value">3 KG</div></div>
+        <div class="neck-prog-item"><div class="label">TARGET</div><div class="value">5 KG</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">03</span><span class="block-title">Pre-Game Aktivierung</span></div>
+      <span class="block-meta mono">10 MIN · Auf dem Court</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">3 MIN</span><span class="name">Dynamic Warmup</span><span class="desc">Joggen, High Knees, Side Shuffles. Wieder Puls hoch nach Pump.</span></div>
+        <div class="stretch-item"><span class="duration mono">3 MIN</span><span class="name">Hip & Ankle Mobility</span><span class="desc">Leg Swings je 10, World's Greatest Stretch 3 je Seite. Beine sind frisch — nutze das.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Schulter-Reset</span><span class="desc">EXTRA wichtig nach dem Pump: Arm Circles + Wall Slides + Band Face-Pulls. Schultern müssen bereit sein für Würfe.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Layups + Freiwürfe</span><span class="desc">Erst paar Layups, dann Freiwürfe. Wenn die Würfe sich komisch anfühlen → war der Pump zu viel. Notiere für nächste Woche.</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== DO: BB + PULL B ====== -->
+<section class="day-detail" data-day-detail="do">
+  <div class="detail-header">
+    <div class="detail-title-block">
+      <div class="day-marker mono">Day 04 · Basketball + Pull B · ~125 MIN total</div>
+      <h2 class="detail-title display">BB<br>+ <span style="color:var(--pull)">PULL B</span></h2>
+      <p class="detail-subtitle">Erst Basketball, danach kurze Pull-Session. Volumen-Tag — leichteres Gewicht, mehr Reps, Pump-Gefühl. Back-Width, Curls, Rear Delts.</p>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item"><div class="label mono">BB Time</div><div class="value">~90 min</div></div>
+      <div class="meta-item"><div class="label mono">Pull Time</div><div class="value">~35 min</div></div>
+      <div class="meta-item"><div class="label mono">Pull Sets</div><div class="value">14 sets</div></div>
+      <div class="meta-item"><div class="label mono">Rest</div><div class="value">60 sec</div></div>
+    </div>
+  </div>
+
+  <div class="phase-bar">
+    <div class="phase"><div class="phase-icon">🏀</div><div class="phase-text"><span class="label mono">Phase 1</span><span class="name">Basketball</span></div></div>
+    <span class="phase-arrow mono">→ 10 min Snack & Rest →</span>
+    <div class="phase"><div class="phase-icon">🦅</div><div class="phase-text"><span class="label mono">Phase 2</span><span class="name">Pull Workout B</span></div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">01</span><span class="block-title">Basketball Pre/Post</span></div>
+      <span class="block-meta mono">15 MIN total</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">10 MIN PRE</span><span class="name">Pre-Game Activation</span><span class="desc">Selbe Routine wie Mo: Dynamic Warmup, Hip & Ankle Mobility, leichte Aktivierung, Layups einschießen.</span></div>
+        <div class="stretch-item"><span class="duration mono">5 MIN POST</span><span class="name">Post-Game Recovery</span><span class="desc">Walking, kurzer Lower Body Stretch, 500ml Wasser. Dann SOFORT zur Pull-Session — nicht abkühlen.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">02</span><span class="block-title">Pull B Workout</span></div>
+      <span class="block-meta mono">5 EX · 14 SETS · VOLUME</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A1</span>
+            <div class="exercise-info"><div class="exercise-name">Single-Arm Row (Knee on Bench)</div><div class="exercise-target mono">Lats · Pro Seite · Volume</div></div>
+            <span class="exercise-volume mono">4 × 8 / Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Heute eine Stufe leichter als Di — fokus auf Squeeze und Range</li>
+                <li>Knie + Hand auf Bench, anderes Bein steht</li>
+                <li>Hantel hängen lassen — voller Lat-Stretch unten</li>
+                <li>Zur Hüfte ziehen, am Top 1 sec Squeeze</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 14kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 16-18kg</span></div>
+                <div class="weight-row"><span class="level">DI VS DO</span><span class="weight">~80% von Di</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A2</span>
+            <div class="exercise-info"><div class="exercise-name">Dumbbell Pullover</div><div class="exercise-target mono">Lats · Volumen-Tag</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Quer auf Bench (oberer Rücken auf Bench, Po hängt)</li>
+                <li>Heute 10-12 Reps — leichteres Gewicht für Pump</li>
+                <li>Voller Lat-Stretch unten, mit Lats zurückziehen</li>
+                <li>Tief einatmen wenn die Hantel hinten ist — dehnt mehr</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 10kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 14-16kg</span></div>
+                <div class="weight-row"><span class="level">FOCUS</span><span class="weight">Stretch + Pump</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B1</span>
+            <div class="exercise-info"><div class="exercise-name">Reverse Fly</div><div class="exercise-target mono">Rear Delts · 2. Hit der Woche</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Bench auf 45°, Brust gegen Lehne (umgekehrt)</li>
+                <li>Seitlich nach oben fliegen — Schulterblätter zusammen, 1 sec halten</li>
+                <li>Form > Gewicht — Rear Delts wachsen mit Volume</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 4kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 5kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 7-8kg</span></div>
+                <div class="weight-row"><span class="level">CUE</span><span class="weight">Squeeze 1 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B2</span>
+            <div class="exercise-info"><div class="exercise-name">Hammer Curl</div><div class="exercise-target mono">Brachialis · Forearms</div></div>
+            <span class="exercise-volume mono">3 × 12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Stehen oder sitzen, Hanteln neutral (Daumen oben)</li>
+                <li>Curlen ohne zu drehen — wie Hammer — 12 Reps pro Arm</li>
+                <li>Slow eccentric: 3 sec runter</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 7kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 9kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">FORM</span><span class="weight">No swing</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C1</span>
+            <div class="exercise-info"><div class="exercise-name">Dumbbell Shrugs</div><div class="exercise-target mono">Trapezius · Finisher</div></div>
+            <span class="exercise-volume mono">3 × 12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Stehen, Hanteln seitlich</li>
+                <li>Schultern hoch zu den Ohren, 1 sec halten</li>
+                <li>NICHT rotieren — gerade hoch und runter</li>
+                <li>Letzte Übung des Tages — gib alles</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 14kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 18-20kg</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">03</span><span class="block-title">Cooldown & Stretch</span></div>
+      <span class="block-meta mono">5 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Lat Stretch (kneeling)</span><span class="desc">Auf Knien vor Bench, Arme oben drauf, Po hinten weg.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Pigeon Stretch</span><span class="desc">Bein vor sich, anderes hinten gestreckt. Glutes & Hüfte aufmachen — wichtig nach Basketball.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Bizeps Wand-Stretch</span><span class="desc">Arm gerade nach hinten an Wand, Körper wegdrehen. Bizeps öffnen.</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== FR: LEGS ====== -->
+<section class="day-detail" data-day-detail="fr">
+  <div class="detail-header">
+    <div class="detail-title-block">
+      <div class="day-marker mono">Day 05 · Legs · ~55 MIN · Frisch</div>
+      <h2 class="detail-title display">LEG<br><span style="color:var(--legs)">DAY</span></h2>
+      <p class="detail-subtitle">Fr ist Bein-Tag — kein BB davor, du bist frisch. Aber: Deine Beine hatten Mo/Mi/Do Basketball + 3× Fahrrad. Deshalb ist dieses Workout bewusst <em>moderat</em> — Qualität über Quantität. Sa+So zum Erholen.</p>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item"><div class="label mono">Duration</div><div class="value">~45 min</div></div>
+      <div class="meta-item"><div class="label mono">Volume</div><div class="value">16 sets</div></div>
+      <div class="meta-item"><div class="label mono">Focus</div><div class="value">Legs + Core</div></div>
+      <div class="meta-item"><div class="label mono">Rest</div><div class="value">90 sec</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">00</span><span class="block-title">Warmup</span></div>
+      <span class="block-meta mono">8 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">3 MIN</span><span class="name">Hip Mobility Flow</span><span class="desc">World's Greatest Stretch 5x je Seite, Hip Circles, 90/90 Switches. Hüfte mobilisieren bevor du belastest.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Glute Activation</span><span class="desc">Glute Bridges 15x, Clamshells je 10x, Banded Lateral Walks 10 Schritte je Seite mit Band.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Knee Prep</span><span class="desc">Bodyweight Squats 15x slow, Calf Raises 20x. Knie & Sprunggelenk auf Betrieb.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Aufwärm-Set</span><span class="desc">Bulgarian Split Squat: 8 reps pro Seite mit halbem Gewicht (oder bodyweight). Bewegungsmuster aktivieren.</span></div>
+        <div class="stretch-item"><span class="duration mono">⚠ CHECK</span><span class="name">Beine schwer heute?</span><span class="desc">3× Basketball + 3× Fahrrad diese Woche = viel Bein-Belastung. Wenn Knie oder Oberschenkel sich komisch anfühlen → Gewicht -20% und alle Sets auf 2 reduzieren. Kein Ego-Lifting auf müden Beinen.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">01</span><span class="block-title">Main Workout</span></div>
+      <span class="block-meta mono">4 EX · 11 SETS · MODERAT</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A1</span>
+            <div class="exercise-info"><div class="exercise-name">Bulgarian Split Squat</div><div class="exercise-target mono">Quads · Glutes · Stabilität · KING</div></div>
+            <span class="exercise-volume mono">3 × 6 / Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Hinten Fuß auf Bench, vorderer Fuß ~70cm vor der Bench</li>
+                <li>Hanteln hängen seitlich — pure Bein-Belastung</li>
+                <li>Runter bis Hinterknie fast Boden — vorderes Knie über Fuß</li>
+                <li>Druck im vorderen Fuß (Mittelfuß bis Ferse), nicht Zehe</li>
+                <li>Hauptübung bleibt — aber 3 Sets reichen nach Basketball-Woche</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 10kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 18-20kg</span></div>
+                <div class="weight-row"><span class="level">NOTE</span><span class="weight">War etwas 4× zu viel</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A2</span>
+            <div class="exercise-info"><div class="exercise-name">Romanian Deadlift (DB)</div><div class="exercise-target mono">Hamstrings · Glutes · Low Back</div></div>
+            <span class="exercise-volume mono">3 × 8</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Hanteln vor Oberschenkeln, Füße hüftbreit</li>
+                <li>Knie LEICHT gebeugt — bleiben so die ganze Zeit</li>
+                <li>Hüfte nach hinten schieben, Brust runter — Hanteln gleiten an Beinen</li>
+                <li>Nur so tief wie Hamstrings sich dehnen ohne Rundrücken</li>
+                <li>Wichtigste Übung gegen Sprung-Verletzungen im Basketball</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 14kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 16kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 20kg</span></div>
+                <div class="weight-row"><span class="level">FR-REGEL</span><span class="weight">RIR 3+ heute</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B1</span>
+            <div class="exercise-info"><div class="exercise-name">Goblet Squat</div><div class="exercise-target mono">Quads · Glutes · Volume · Tiefe</div></div>
+            <span class="exercise-volume mono">2 × 10</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Eine Hantel vor der Brust halten (am oberen Hantelkopf)</li>
+                <li>Füße schulterbreit, Zehen leicht raus</li>
+                <li>So tief wie sauber möglich (Oberschenkel parallel oder tiefer)</li>
+                <li>Hochdrücken über Fersen, Brust hoch</li>
+                <li>Nur 2 Sets nach Bulgarian — Volumen bewusst runtergeschraubt</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 16kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 18kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 20kg</span></div>
+                <div class="weight-row"><span class="level">DEPTH</span><span class="weight">Ass to Grass</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B2</span>
+            <div class="exercise-info"><div class="exercise-name">Single-Leg Calf Raise</div><div class="exercise-target mono">Calves · Sprunggelenk-Stab</div></div>
+            <span class="exercise-volume mono">3 × 10-12 / Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Auf einer Stufe oder Rand stehen, Ferse hängt runter</li>
+                <li>Eine Hantel in der gleichen Hand wie das Standbein</li>
+                <li>Voll hoch (auf Zehenspitze) — voll runter (Ferse unter Stufe)</li>
+                <li>Schutz gegen Knöchel-Verstauchungen im Basketball</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 14kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 18-20kg</span></div>
+                <div class="weight-row"><span class="level">RANGE</span><span class="weight">Full ROM</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Core Block auf Fr (Schrägbank) -->
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">02</span><span class="block-title">Core Block</span></div>
+      <span class="block-meta mono">3 EX · Schrägbank</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C1</span>
+            <div class="exercise-info"><div class="exercise-name">Crunches (Schrägbank)</div><div class="exercise-target mono">Obere Bauchmuskeln</div></div>
+            <span class="exercise-volume mono">3 × 20</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Schrägbank mit Beinhalterung, Kopf leicht nach unten</li>
+                <li>Nur oberen Rücken abheben, Bauch am Top anspannen 1 sec</li>
+                <li>Langsam zurück — volle Dehnung unten</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SETS</span><span class="weight">3 × 20</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C2</span>
+            <div class="exercise-info"><div class="exercise-name">Leg Raises (Schrägbank)</div><div class="exercise-target mono">Lower Abs</div></div>
+            <span class="exercise-volume mono">3 × 15</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Kopf oben, Beine über das untere Ende hängen</li>
+                <li>Beine langsam nach oben bis ~90°, kontrolliert runter</li>
+                <li>NICHT ablegen — Spannung immer halten</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SETS</span><span class="weight">3 × 15</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">C3</span>
+            <div class="exercise-info"><div class="exercise-name">Plank + Side Plank</div><div class="exercise-target mono">Core · Stabilität</div></div>
+            <span class="exercise-volume mono">3 × 60s + 30s/Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Plank: Unterarme auf Boden, Körper gerade Linie, Bauch fest</li>
+                <li>60 sec halten — direkt danach Side Plank links + rechts</li>
+                <li>Core ist Pflicht für stabile Sprünge & Drehbewegungen</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">60s + 30/30</span></div>
+                <div class="weight-row"><span class="level">SET 2</span><span class="weight">50s + 25/25</span></div>
+                <div class="weight-row"><span class="level">SET 3</span><span class="weight">40s + 20/20</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded neck-block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">03</span><span class="block-title">Neck Block</span></div>
+      <span class="block-meta mono">5 MIN · 3/3 WEEKLY</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="neck-exercises">
+        <div class="neck-ex"><div class="neck-ex-num">01</div><div class="neck-ex-info"><h6>Chin Tucks</h6><div class="desc">Kinn nach hinten ziehen wie ein Doppelkinn — 2 sec halten, lösen.</div></div><div class="neck-ex-volume mono">2 × 12</div></div>
+        <div class="neck-ex"><div class="neck-ex-num">02</div><div class="neck-ex-info"><h6>Weighted Neck Curls</h6><div class="desc">Auf Bench liegen, Kopf hängt über die Kante. Hantelscheibe (mit Tuch gepolstert) auf Stirn halten. Slow eccentric: 3-4 sec runter.</div></div><div class="neck-ex-volume mono">3 × 15-20</div></div>
+      </div>
+      <div class="neck-progression">
+        <div class="neck-prog-item"><div class="label">START</div><div class="value">1 KG</div></div>
+        <div class="neck-prog-item"><div class="label">WEEK 4</div><div class="value">2 KG</div></div>
+        <div class="neck-prog-item"><div class="label">WEEK 8</div><div class="value">3 KG</div></div>
+        <div class="neck-prog-item"><div class="label">TARGET</div><div class="value">5 KG</div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">04</span><span class="block-title">Cooldown & Stretch</span></div>
+      <span class="block-meta mono">7 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Pigeon Stretch</span><span class="desc">Bein vor sich angewinkelt, anderes Bein nach hinten gestreckt. Glutes & Hüfte aufmachen.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Couch Stretch</span><span class="desc">Hinterbein an Wand/Bench hoch, Knie unten, Brust hoch. Hip Flexor + Quad. KING für Basketballer.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Hamstring Stretch</span><span class="desc">Sitzend, ein Bein gerade aus, anderes angewinkelt — vorne runterbeugen.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s</span><span class="name">Cobra Pose</span><span class="desc">Auf Bauch liegen, Hände unter Schultern, Brust hoch drücken. Bauch dehnen nach Core-Block.</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== SA: SCULPT ====== -->
+<section class="day-detail" data-day-detail="sa">
+  <div class="detail-header">
+    <div class="detail-title-block">
+      <div class="day-marker mono">Day 06 · Sculpt · ~35-40 MIN</div>
+      <h2 class="detail-title display">SCULPT<br><span style="color:var(--sculpt)">DAY</span></h2>
+      <p class="detail-subtitle">Der Bonus-Tag — <strong style="color:var(--accent)">wirklich optional.</strong> Deine Beine haben Fr Legs + Basketball-Woche + Fahrrad hinter sich. Wenn du dich gut fühlst: full program. Wenn müde: nur den Core-Block machen und den Pull weglassen. Kein schlechtes Gewissen.</p>
+    </div>
+    <div class="detail-meta">
+      <div class="meta-item"><div class="label mono">Duration</div><div class="value">~37 min</div></div>
+      <div class="meta-item"><div class="label mono">Volume</div><div class="value">21 sets</div></div>
+      <div class="meta-item"><div class="label mono">Focus</div><div class="value">Back + Core</div></div>
+      <div class="meta-item"><div class="label mono">Rest</div><div class="value">60 sec</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">00</span><span class="block-title">Quick Warmup</span></div>
+      <span class="block-meta mono">5 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 MIN</span><span class="name">Cat-Cow + Cobra Flow</span><span class="desc">10x Cat-Cow, 8x Cobra-to-Child. Wirbelsäule mobilisieren, Bauch aufwärmen.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Band Pull-Aparts</span><span class="desc">2 × 12 mit mittlerem Band. Rear Delts und obere Rückenmitte aktivieren.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Dead Bug Activation</span><span class="desc">8 reps slow. Tiefe Bauchmuskel-Aktivierung — bereitet auf Ab-Block vor.</span></div>
+        <div class="stretch-item"><span class="duration mono">1 MIN</span><span class="name">Hip Mobility</span><span class="desc">Hip Circles je 5x, World's Greatest Stretch 3x je Seite.</span></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">01</span><span class="block-title">Pull Volume Block</span></div>
+      <span class="block-meta mono">3 EX · 9 SETS · NUR WENN FRISCH</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A1</span>
+            <div class="exercise-info"><div class="exercise-name">Underhand Single-Arm Row</div><div class="exercise-target mono">Lower Lats · Bizeps · Andere Range</div></div>
+            <span class="exercise-volume mono">3 × 8 / Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Wie Single-Arm Row ABER: Handfläche zeigt nach OBEN (Underhand)</li>
+                <li>Trifft die unteren Lats anders — wichtig für komplette V-Form</li>
+                <li>Knie + Hand auf Bench, zur Hüfte ziehen, Ellbogen nah am Körper</li>
+                <li>Squeeze 1 sec am Top · RIR 1-2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 14kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 16-18kg</span></div>
+                <div class="weight-row"><span class="level">FOCUS</span><span class="weight">Lower Lat</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A2</span>
+            <div class="exercise-info"><div class="exercise-name">Lying Dumbbell Pullover</div><div class="exercise-target mono">Lats · Brust-Stretch · Volume</div></div>
+            <span class="exercise-volume mono">3 × 10-12</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Auf Bench liegen (lang), eine Hantel mit beiden Händen</li>
+                <li>Leichte Beuge in Ellbogen — bleibt so die ganze Zeit</li>
+                <li>Langsam hinter den Kopf senken — voller Lat-Stretch</li>
+                <li>Tief einatmen unten — mit Lats zurückziehen, NICHT Trizeps</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 10kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">1 × 12kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 14-16kg</span></div>
+                <div class="weight-row"><span class="level">CUE</span><span class="weight">Slow stretch</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">A3</span>
+            <div class="exercise-info"><div class="exercise-name">Renegade Row</div><div class="exercise-target mono">Rücken + Core · Combo Move</div></div>
+            <span class="exercise-volume mono">3 × 6 / Seite</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Plank-Position, Hände auf Hanteln</li>
+                <li>Eine Hand zur Hüfte ziehen, andere stabilisiert</li>
+                <li>Hüfte gerade halten — NICHT rotieren, Body wie Brett</li>
+                <li>Wenn zu schwer: Knie ablegen statt Plank</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">2 × 7kg</span></div>
+                <div class="weight-row"><span class="level">WEEK 4</span><span class="weight">2 × 9kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">2 × 12kg</span></div>
+                <div class="weight-row"><span class="level">RULE</span><span class="weight">No hip rotation</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block expanded">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">02</span><span class="block-title">Core Block</span></div>
+      <span class="block-meta mono">4 EX · 12 SETS · ABS</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="exercise-list">
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B1</span>
+            <div class="exercise-info"><div class="exercise-name">Lying Leg Raises</div><div class="exercise-target mono">Untere Bauch · KEY für Six-Pack</div></div>
+            <span class="exercise-volume mono">3 × 12-15</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Auf Rücken liegen, Hände unter Po</li>
+                <li>Beine langsam nach oben (90°), kontrolliert wieder runter</li>
+                <li>NICHT auf Boden ablegen — Spannung halten</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">15 reps</span></div>
+                <div class="weight-row"><span class="level">SET 2-3</span><span class="weight">12+ reps</span></div>
+                <div class="weight-row"><span class="level">REST</span><span class="weight">45 sec</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B2</span>
+            <div class="exercise-info"><div class="exercise-name">Bicycle Crunches</div><div class="exercise-target mono">Schräge + obere Bauch</div></div>
+            <span class="exercise-volume mono">3 × 20 (10/Seite)</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Hände hinter Kopf (locker, nicht ziehen)</li>
+                <li>Abwechselnd: rechtes Knie + linker Ellbogen, anderes Bein streckt</li>
+                <li>Drehung kommt aus dem CORE, nicht aus dem Hals — langsam</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SETS</span><span class="weight">3 × 20 (10/S)</span></div>
+                <div class="weight-row"><span class="level">TEMPO</span><span class="weight">Slow + control</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B3</span>
+            <div class="exercise-info"><div class="exercise-name">Russian Twists w/ Dumbbell</div><div class="exercise-target mono">Schräge · Rotational Power</div></div>
+            <span class="exercise-volume mono">3 × 20 (10/Seite)</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>Sitzen, Knie gebeugt, Füße leicht über Boden (V-Sit)</li>
+                <li>Eine Hantel mit beiden Händen, Oberkörper leicht nach hinten</li>
+                <li>Hantel zu einer Seite drehen, dann zur anderen — Hüfte stabil</li>
+                <li>Auch super für Basketball — bessere Drehbewegungen</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Weight Guide</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">START</span><span class="weight">1 × 6kg</span></div>
+                <div class="weight-row"><span class="level">TARGET</span><span class="weight">1 × 10-12kg</span></div>
+                <div class="weight-row"><span class="level">FORM</span><span class="weight">Hip stable</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="exercise">
+          <div class="exercise-head" onclick="toggleExercise(this)">
+            <span class="exercise-num mono">B4</span>
+            <div class="exercise-info"><div class="exercise-name">Plank w/ Shoulder Tap</div><div class="exercise-target mono">Anti-Rotation · Finisher</div></div>
+            <span class="exercise-volume mono">3 × 30-40s</span>
+            <span class="exercise-arrow">⌄</span>
+          </div>
+          <div class="exercise-body"><div class="exercise-detail">
+            <div>
+              <div class="detail-block-title mono">Execution</div>
+              <ul class="cue-list">
+                <li>High Plank, gestreckte Arme</li>
+                <li>Rechte Hand → linke Schulter tippen, dann links → rechts</li>
+                <li>Hüfte bleibt PARALLEL zum Boden — kein Wackeln</li>
+                <li>Letzte Übung — gib alles, Sa+So zur Erholung</li>
+              </ul>
+            </div>
+            <div>
+              <div class="detail-block-title mono">Targets</div>
+              <div class="weight-suggest">
+                <div class="weight-row"><span class="level">SET 1</span><span class="weight">40s</span></div>
+                <div class="weight-row"><span class="level">SET 2</span><span class="weight">35s</span></div>
+                <div class="weight-row"><span class="level">SET 3</span><span class="weight">30s</span></div>
+                <div class="weight-row"><span class="level">RULE</span><span class="weight">No hip wobble</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <button class="block-head" onclick="toggleBlock(this)">
+      <div class="block-head-left"><span class="block-num mono">03</span><span class="block-title">Cooldown & Stretch</span></div>
+      <span class="block-meta mono">5 MIN</span>
+      <span class="block-toggle">+</span>
+    </button>
+    <div class="block-body"><div class="block-content">
+      <div class="stretch-list">
+        <div class="stretch-item"><span class="duration mono">2 × 30s</span><span class="name">Cobra Pose</span><span class="desc">Auf Bauch liegen, Hände unter Schultern, Brust hoch drücken. Bauch dehnen nach allem Crunchen.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Spinal Twist (liegend)</span><span class="desc">Auf Rücken, ein Knie über den Körper rüber. Untere Wirbelsäule lockern.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s pro Seite</span><span class="name">Lat Stretch (kneeling)</span><span class="desc">Auf Knien vor Bench, Arme oben drauf, Po hinten weg.</span></div>
+        <div class="stretch-item"><span class="duration mono">2 × 30s</span><span class="name">Child's Pose</span><span class="desc">Auf Knien, Po zurück zu Fersen, Arme nach vorn ausstrecken. Friedlich endend.</span></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ====== SO: REST ====== -->
+<section class="day-detail" data-day-detail="so">
+  <div class="rest-display">
+    <div class="big display">REST<br>DAY</div>
+    <p class="quote">"Sonntag ist Reset. 6 Sessions + 3× Basketball hinter dir — heute heilt der Körper. Morgen geht's wieder los."</p>
+    <div class="rest-tips">
+      <div class="rest-tip"><h4 class="mono">/// SLEEP</h4><p>9-10h heute. Schlaf ist der wichtigste Faktor für Wachstum — du hast es verdient.</p></div>
+      <div class="rest-tip"><h4 class="mono">/// FOOD</h4><p>Iss heute besonders viel. Kalorien-Surplus + ~120g Protein. Pasta, Reis, Hähnchen sind dein Freund.</p></div>
+      <div class="rest-tip"><h4 class="mono">/// CHILL</h4><p>Nur 20 min Spaziergang oder leichtes Stretching. KEIN Lifting, KEIN Basketball. Family time, Hobbies — alles erlaubt außer Training.</p></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<!-- ============ FOUNDATION ============ -->
+<section class="foundation">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div><div class="section-num mono">/// 02</div><div class="section-title">FOUNDATION</div></div>
+      <div class="section-aside mono">Die Prinzipien</div>
+    </div>
+    <div class="foundation-grid" style="grid-template-columns: repeat(2,1fr)" data-reveal>
+      <div class="foundation-card">
+        <div class="foundation-icon">⚡</div>
+        <h3>Progression</h3>
+        <p>Compounds 6-8 Reps, Iso 8-12 Reps. Letzte 2 Reps müssen schwer sein (RIR 1-2). Wenn du easy 5+ mehr machen könntest → Gewicht hoch.</p>
+        <ul class="foundation-list">
+          <li><span>Compounds</span><span>6-8 reps</span></li>
+          <li><span>Isolation</span><span>8-12 reps</span></li>
+          <li><span>Target RIR</span><span>1-2</span></li>
+          <li><span>Steigerung</span><span>+1kg / 2 wks</span></li>
+        </ul>
+      </div>
+      <div class="foundation-card">
+        <div class="foundation-icon">🍽</div>
+        <h3>Nutrition</h3>
+        <p>5kg lean muscle in 6-12 Monaten ist realistisch. Kalorien-Surplus von ~300-500/Tag. Protein bei jeder Mahlzeit, Shake täglich.</p>
+        <ul class="foundation-list">
+          <li><span>Kalorien</span><span>~2700-2900</span></li>
+          <li><span>Protein / Tag</span><span>~120-130g</span></li>
+          <li><span>Carbs</span><span>~350-400g</span></li>
+          <li><span>Fat</span><span>~70-80g</span></li>
+        </ul>
+      </div>
+      <div class="foundation-card">
+        <div class="foundation-icon">📊</div>
+        <h3>Recovery Check</h3>
+        <p>Wöchentlich checken. Wenn 2+ davon "Nein": eine Session rausnehmen oder Gewicht -20%.</p>
+        <ul class="foundation-list">
+          <li><span>Schlaf gut?</span><span>8-9h Ziel</span></li>
+          <li><span>Lust auf Training?</span><span>≥ 7/10</span></li>
+          <li><span>Performance stabil?</span><span>Kein Einbruch</span></li>
+          <li><span>Knie/Beine OK?</span><span>Kein Zwicken</span></li>
+        </ul>
+      </div>
+      <div class="foundation-card">
+        <div class="foundation-icon">🛡</div>
+        <h3>Neck Training</h3>
+        <p>3× pro Woche im Workout integriert (Mo, Mi, Fr). Nur zwei Übungen — Chin Tucks und Weighted Neck Curls. Schützt vor Verletzungen.</p>
+        <ul class="foundation-list">
+          <li><span>Frequenz</span><span>3× / wk</span></li>
+          <li><span>Sets</span><span>2-3 pro Übung</span></li>
+          <li><span>Reps</span><span>15-20</span></li>
+          <li><span>Progression</span><span>1 → 5 kg</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STRATEGY ============ -->
+<section class="foundation" style="border-top: 1px solid var(--line);">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div><div class="section-num mono">/// 03</div><div class="section-title">WARUM SO</div></div>
+      <div class="section-aside mono">Die Strategie hinter dem Plan</div>
+    </div>
+    <div class="foundation-grid" data-reveal>
+      <div class="foundation-card">
+        <div class="foundation-icon">📈</div>
+        <h3>3× Rücken-Hits</h3>
+        <p>Für V-Form ohne Klimmzugstange, mit Hanteln — extra Volumen am Sa bringt's. Rücken kommt 3× pro Woche dran.</p>
+        <ul class="foundation-list">
+          <li><span>Di Pull A</span><span>10 sets schwer</span></li>
+          <li><span>Do Pull B</span><span>7 sets pump</span></li>
+          <li><span>Sa Sculpt</span><span>9 sets variation</span></li>
+          <li><span>Total / Wk</span><span>~26 sets</span></li>
+        </ul>
+      </div>
+      <div class="foundation-card">
+        <div class="foundation-icon">🎯</div>
+        <h3>Seated Ext. Logic</h3>
+        <p>Seated Overhead Tricep Extension trifft den Long Head des Trizeps — macht Arme sichtbar dicker. 2× pro Woche (Mo + Mi), angepasst ans BB-Setup.</p>
+        <ul class="foundation-list">
+          <li><span>Mo</span><span>Schwer, 3×10-12</span></li>
+          <li><span>Mi</span><span>Leichter, Pump</span></li>
+          <li><span>Finisher Mo</span><span>Diamond Push-ups</span></li>
+          <li><span>Finisher Mi</span><span>Push-ups AMRAP</span></li>
+        </ul>
+      </div>
+      <div class="foundation-card">
+        <div class="foundation-icon">🔥</div>
+        <h3>Sa = Optional</h3>
+        <p>Sculpt-Day ist der Bonus. Wenn du dich gut fühlst → mach. Wenn erschöpft → skip ohne schlechtes Gewissen. Recovery IST das Training.</p>
+        <ul class="foundation-list">
+          <li><span>Sculpt Time</span><span>~37 min</span></li>
+          <li><span>Pull Volume</span><span>9 sets</span></li>
+          <li><span>Core Volume</span><span>12 sets</span></li>
+          <li><span>Sunday</span><span>Always Rest</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORTSCHRITT PAGE ============ -->
+<div class="page" id="page-progress" style="display:none">
+  <div class="container">
+    <div class="progress-page-head">
+      <div class="section-num mono">/// LOGBUCH</div>
+      <div class="section-title display">FORT<span style="color:var(--accent)">SCHRITT</span></div>
+      <p style="font-size:14px;color:var(--text-dim);margin-top:12px;max-width:480px;line-height:1.6">Alle eingetragenen Sessions. Neueste zuerst. Log-Icon 📊 in jeder Übung antippen um neue Session einzutragen.</p>
+    </div>
+    <div id="progress-content" class="progress-grid"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-mark display">SHIFT.</div>
+    <div class="footer-meta mono">v4.1 · BUILT FOR MARVIN · MAI 2026 · KEEP MOVING</div>
+  </div>
+</footer>
+
+<script>
+// ============ DAY NAVIGATION ============
+const dayCards = document.querySelectorAll('[data-day]');
+const dayDetails = document.querySelectorAll('[data-day-detail]');
+
+dayCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const day = card.dataset.day;
+    dayCards.forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    dayDetails.forEach(d => d.classList.remove('visible'));
+    const target = document.querySelector(`[data-day-detail="${day}"]`);
+    if (target) {
+      target.classList.add('visible');
+      setTimeout(() => {
+        const offset = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }, 50);
+    }
+    document.getElementById('page-progress').style.display = 'none';
+    document.querySelectorAll('.hero,.week-section,.foundation,.footer').forEach(el => el.style.display = '');
+  });
+});
+
+const dayMap = ['so', 'mo', 'di', 'mi', 'do', 'fr', 'sa'];
+const today = dayMap[new Date().getDay()];
+const todayCard = document.querySelector(`[data-day="${today}"]`);
+if (todayCard) todayCard.classList.add('today');
+
+function toggleBlock(btn) { btn.closest('.block').classList.toggle('expanded'); }
+function toggleExercise(head) { head.closest('.exercise').classList.toggle('open'); }
+
+const reveals = document.querySelectorAll('[data-reveal]');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('in'); revealObserver.unobserve(entry.target); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+reveals.forEach(el => revealObserver.observe(el));
+
+document.addEventListener('keydown', (e) => {
+  const days = ['mo','di','mi','do','fr','sa','so'];
+  const current = document.querySelector('.day-card.active')?.dataset.day;
+  const idx = days.indexOf(current);
+  if (e.key === 'ArrowRight' && idx < 6) document.querySelector(`[data-day="${days[idx+1]}"]`).click();
+  else if (e.key === 'ArrowLeft' && idx > 0) document.querySelector(`[data-day="${days[idx-1]}"]`).click();
+});
+
+// ============ PAGE SWITCH ============
+function switchPage(name) {
+  const progressPage = document.getElementById('page-progress');
+  if (name === 'progress') {
+    progressPage.style.display = 'block';
+    document.querySelectorAll('.hero,.week-section,.foundation,.footer').forEach(el => el.style.display = 'none');
+    dayDetails.forEach(d => d.classList.remove('visible'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderProgressPage();
+  } else {
+    progressPage.style.display = 'none';
+    document.querySelectorAll('.hero,.week-section,.foundation,.footer').forEach(el => el.style.display = '');
+  }
+}
+
+// ============ STORAGE HELPERS (localStorage) ============
+const STORAGE_PREFIX = 'shift_v41_';
+
+function storageGet(exId) {
+  try {
+    const val = localStorage.getItem(STORAGE_PREFIX + exId);
+    return val ? JSON.parse(val) : [];
+  } catch(e) { return []; }
+}
+
+function storageSet(exId, history) {
+  try {
+    localStorage.setItem(STORAGE_PREFIX + exId, JSON.stringify(history));
+    return true;
+  } catch(e) { return false; }
+}
+
+function storageDelete(exId) {
+  try { localStorage.removeItem(STORAGE_PREFIX + exId); } catch(e) {}
+}
+
+function storageGetAllKeys() {
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(STORAGE_PREFIX)) keys.push(k.replace(STORAGE_PREFIX, ''));
+  }
+  return keys;
+}
+
+// ============ LOG SYSTEM ============
+const DAY_LABELS = {
+  mo: 'Montag · BB + Push', di: 'Dienstag · Pull A',
+  mi: 'Mittwoch · Push B + BB', do: 'Donnerstag · BB + Pull B',
+  fr: 'Freitag · Legs', sa: 'Samstag · Sculpt'
+};
+
+function getExerciseName(exEl) {
+  return exEl.querySelector('.exercise-name')?.textContent?.trim() || 'Übung';
+}
+
+function initLogs() {
+  document.querySelectorAll('.exercise').forEach(ex => {
+    const dayDetail = ex.closest('[data-day-detail]');
+    const exNum = ex.querySelector('.exercise-num')?.textContent?.trim();
+    if (!dayDetail || !exNum) return;
+    const exId = `${dayDetail.dataset.dayDetail}_${exNum.replace(/[^a-zA-Z0-9]/g,'_')}`;
+    ex.dataset.exid = exId;
+    const head = ex.querySelector('.exercise-head');
+    if (!head) return;
+    const btn = document.createElement('button');
+    btn.className = 'log-btn';
+    btn.innerHTML = '📊';
+    btn.title = 'Session loggen';
+    btn.onclick = (e) => { e.stopPropagation(); toggleLog(exId, ex, btn); };
+    head.appendChild(btn);
+  });
+}
+
+function toggleLog(exId, exEl, btn) {
+  const existing = exEl.querySelector('.log-section');
+  if (existing) { existing.remove(); btn.classList.remove('active'); return; }
+  btn.classList.add('active');
+  exEl.classList.add('open');
+  const logSection = document.createElement('div');
+  logSection.className = 'log-section';
+  logSection.innerHTML = buildLogHTML(exId);
+  exEl.appendChild(logSection);
+}
+
+function buildLogHTML(exId) {
+  const history = storageGet(exId);
+  const entries = history.slice(-5).reverse();
+  const historyHTML = entries.length === 0
+    ? '<div class="log-empty">Noch kein Log — erste Session eintragen!</div>'
+    : entries.map(e => `
+        <div class="log-entry">
+          <span class="log-date pd">${e.date}</span>
+          <span class="log-weight">${e.weight}</span>
+          <span class="log-reps">${e.reps}</span>
+        </div>`).join('');
+  return `
+    <div class="log-head-label">SESSION LOG</div>
+    <div class="log-history" id="lh_${exId}">${historyHTML}</div>
+    <div class="log-form">
+      <input class="log-input" id="lw_${exId}" placeholder="Gewicht (z.B. 2×12kg)" autocomplete="off"/>
+      <input class="log-input" id="lr_${exId}" placeholder="Reps (z.B. 8, 8, 7)" autocomplete="off"/>
+      <button class="log-save-btn" onclick="saveLog('${exId}')">Speichern ✓</button>
+    </div>
+    <div id="lf_${exId}"></div>`;
+}
+
+function saveLog(exId) {
+  const wEl = document.getElementById(`lw_${exId}`);
+  const rEl = document.getElementById(`lr_${exId}`);
+  const fb  = document.getElementById(`lf_${exId}`);
+  const weight = wEl?.value?.trim();
+  const reps   = rEl?.value?.trim();
+
+  if (!weight && !reps) {
+    if (fb) { fb.innerHTML = '<div class="log-saved-flash">⚠ Bitte Gewicht oder Reps eingeben</div>'; setTimeout(() => fb.innerHTML = '', 2000); }
+    return;
+  }
+
+  const history = storageGet(exId);
+  const d = new Date();
+  const dateStr = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}`;
+  history.push({ date: dateStr, weight: weight || '—', reps: reps || '—' });
+  if (history.length > 30) history.splice(0, history.length - 30);
+
+  if (storageSet(exId, history)) {
+    if (wEl) wEl.value = '';
+    if (rEl) rEl.value = '';
+    if (fb) { fb.innerHTML = '<div class="log-saved-flash">✓ Gespeichert!</div>'; setTimeout(() => fb.innerHTML = '', 2000); }
+    const histEl = document.getElementById(`lh_${exId}`);
+    if (histEl) {
+      histEl.innerHTML = history.slice(-5).reverse().map(e => `
+        <div class="log-entry">
+          <span class="log-date pd">${e.date}</span>
+          <span class="log-weight">${e.weight}</span>
+          <span class="log-reps">${e.reps}</span>
+        </div>`).join('');
+    }
+  } else {
+    if (fb) fb.innerHTML = '<div class="log-saved-flash">⚠ Speichern fehlgeschlagen</div>';
+  }
+}
+
+// ============ FORTSCHRITT PAGE ============
+function renderProgressPage() {
+  const container = document.getElementById('progress-content');
+  const exercises  = document.querySelectorAll('.exercise[data-exid]');
+  const allLogs    = [];
+
+  exercises.forEach(ex => {
+    const exId   = ex.dataset.exid;
+    if (!exId) return;
+    const history = storageGet(exId);
+    if (history.length === 0) return;
+    const dayKey = exId.split('_')[0];
+    allLogs.push({
+      exId,
+      name: getExerciseName(ex),
+      dayLabel: DAY_LABELS[dayKey] || dayKey,
+      history,
+      lastEntry: history[history.length - 1]
+    });
+  });
+
+  if (allLogs.length === 0) {
+    container.innerHTML = `
+      <div class="progress-empty">
+        <span class="big">0</span>
+        Noch keine Sessions geloggt.<br>
+        Öffne eine Übung, tippe 📊 an und trag dein erstes Gewicht ein.
+      </div>`;
+    return;
+  }
+
+  allLogs.sort((a, b) => (b.lastEntry?.date || '').localeCompare(a.lastEntry?.date || ''));
+
+  container.innerHTML = allLogs.map(log => {
+    const entries  = log.history.slice(-4).reverse();
+    const trend    = getTrend(log.history);
+    const histHTML = entries.map(e => `
+      <div class="progress-row-mini">
+        <span class="pd">${e.date}</span>
+        <span>${e.weight}</span>
+        <span style="text-align:right;color:var(--text-faint)">${e.reps}</span>
+      </div>`).join('');
+    return `
+      <div class="progress-card">
+        <div class="progress-card-head">
+          <div>
+            <div class="progress-card-name">${log.name}</div>
+            <div class="progress-card-day">${log.dayLabel}</div>
+          </div>
+          <div>
+            <div class="progress-card-last-label">Letztes</div>
+            <div class="progress-card-last">${log.lastEntry.weight}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);text-align:right">${log.lastEntry.reps}</div>
+          </div>
+        </div>
+        <div class="progress-history-mini">${histHTML}</div>
+        ${trend ? `<div class="progress-trend ${trend.cls}">${trend.text}</div>` : ''}
+        <div style="padding:0 20px 16px;display:flex;justify-content:flex-end">
+          <button class="clear-log-btn" onclick="clearLog('${log.exId}')">Log löschen</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function getTrend(history) {
+  if (history.length < 2) return null;
+  const extract = s => { const m = s.match(/(\d+(?:\.\d+)?)\s*kg/i); return m ? parseFloat(m[1]) : null; };
+  const a = extract(history[history.length - 1].weight);
+  const b = extract(history[history.length - 2].weight);
+  if (a === null || b === null) return null;
+  if (a > b) return { cls: 'up',   text: `↑ +${(a-b).toFixed(1)}kg seit letzter Session` };
+  if (a < b) return { cls: 'same', text: `↓ ${(b-a).toFixed(1)}kg weniger als letzte Session` };
+  return { cls: 'same', text: '→ Gleiches Gewicht wie letzte Session' };
+}
+
+function clearLog(exId) {
+  if (!confirm('Log für diese Übung wirklich löschen?')) return;
+  storageDelete(exId);
+  renderProgressPage();
+}
+
+// Init
+initLogs();
+</script>
+
+dayCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const day = card.dataset.day;
+    dayCards.forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    dayDetails.forEach(d => d.classList.remove('visible'));
+    const target = document.querySelector(`[data-day-detail="${day}"]`);
+    if (target) {
+      target.classList.add('visible');
+      setTimeout(() => {
+        const offset = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }, 50);
+    }
+    // Hide progress page
+    document.getElementById('page-progress').style.display = 'none';
+    document.querySelectorAll('.hero,.week-section,.foundation,.footer').forEach(el => el.style.display = '');
+  });
+});
+
+const dayMap = ['so', 'mo', 'di', 'mi', 'do', 'fr', 'sa'];
+const today = dayMap[new Date().getDay()];
+const todayCard = document.querySelector(`[data-day="${today}"]`);
+if (todayCard) todayCard.classList.add('today');
+
+function toggleBlock(btn) {
+  const block = btn.closest('.block');
+  block.classList.toggle('expanded');
+}
+
+function toggleExercise(head) {
+  const ex = head.closest('.exercise');
+  ex.classList.toggle('open');
+}
+
+const reveals = document.querySelectorAll('[data-reveal]');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+reveals.forEach(el => revealObserver.observe(el));
+
+document.addEventListener('keydown', (e) => {
+  const days = ['mo','di','mi','do','fr','sa','so'];
+  const current = document.querySelector('.day-card.active')?.dataset.day;
+  const idx = days.indexOf(current);
+  if (e.key === 'ArrowRight' && idx < 6) document.querySelector(`[data-day="${days[idx+1]}"]`).click();
+  else if (e.key === 'ArrowLeft' && idx > 0) document.querySelector(`[data-day="${days[idx-1]}"]`).click();
+});
+
+// ============ PAGE SWITCH ============
+function switchPage(name) {
+  const progressPage = document.getElementById('page-progress');
+  const mainSections = document.querySelectorAll('.hero, .week-section, .container > section, .foundation, .footer');
+  const mainContainer = document.querySelector('.container');
+
+  if (name === 'progress') {
+    progressPage.style.display = 'block';
+    document.querySelectorAll('.hero, .week-section, .foundation, .footer').forEach(el => el.style.display = 'none');
+    dayDetails.forEach(d => d.classList.remove('visible'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderProgressPage();
+  } else {
+    progressPage.style.display = 'none';
+    document.querySelectorAll('.hero, .week-section, .foundation, .footer').forEach(el => el.style.display = '');
+  }
+}
+
+// ============ LOG SYSTEM ============
+const DAY_LABELS = { mo: 'Montag · BB + Push', di: 'Dienstag · Pull A', mi: 'Mittwoch · Push B + BB', do: 'Donnerstag · BB + Pull B', fr: 'Freitag · Legs', sa: 'Samstag · Sculpt' };
+
+function getExerciseName(exEl) {
+  return exEl.querySelector('.exercise-name')?.textContent?.trim() || 'Übung';
+}
+
+function initLogs() {
+  document.querySelectorAll('.exercise').forEach(ex => {
+    const dayDetail = ex.closest('[data-day-detail]');
+    const exNum = ex.querySelector('.exercise-num')?.textContent?.trim();
+    if (!dayDetail || !exNum) return;
+    const exId = `${dayDetail.dataset.dayDetail}_${exNum.replace(/[^a-zA-Z0-9]/g,'_')}`;
+    ex.dataset.exid = exId;
+
+    const head = ex.querySelector('.exercise-head');
+    if (!head) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'log-btn';
+    btn.innerHTML = '📊';
+    btn.title = 'Session loggen';
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      toggleLog(exId, ex, btn);
+    };
+    head.appendChild(btn);
+  });
+}
+
+async function toggleLog(exId, exEl, btn) {
+  let existing = exEl.querySelector('.log-section');
+  if (existing) {
+    existing.remove();
+    btn.classList.remove('active');
+    return;
+  }
+  btn.classList.add('active');
+  // Make sure exercise is open
+  exEl.classList.add('open');
+
+  const logSection = document.createElement('div');
+  logSection.className = 'log-section';
+  logSection.innerHTML = await buildLogHTML(exId);
+  exEl.appendChild(logSection);
+}
+
+async function buildLogHTML(exId) {
+  let history = [];
+  try {
+    const result = await window.storage.get(`shift_v41_${exId}`);
+    if (result) history = JSON.parse(result.value);
+  } catch(e) { history = []; }
+
+  const entries = history.slice(-5).reverse();
+  const historyHTML = entries.length === 0
+    ? '<div class="log-empty">Noch kein Log — erste Session eintragen!</div>'
+    : entries.map((e, i) => `
+        <div class="log-entry">
+          <span class="log-date pd">${e.date}</span>
+          <span class="log-weight">${e.weight}</span>
+          <span class="log-reps">${e.reps}</span>
+        </div>`).join('');
+
+  return `
+    <div class="log-head-label">SESSION LOG</div>
+    <div class="log-history" id="lh_${exId}">${historyHTML}</div>
+    <div class="log-form">
+      <input class="log-input" id="lw_${exId}" placeholder="Gewicht (z.B. 2×12kg)" autocomplete="off"/>
+      <input class="log-input" id="lr_${exId}" placeholder="Reps (z.B. 8, 8, 7)" autocomplete="off"/>
+      <button class="log-save-btn" onclick="saveLog('${exId}')">Speichern ✓</button>
+    </div>
+    <div id="lf_${exId}"></div>`;
+}
+
+async function saveLog(exId) {
+  const wEl = document.getElementById(`lw_${exId}`);
+  const rEl = document.getElementById(`lr_${exId}`);
+  const fb = document.getElementById(`lf_${exId}`);
+  const weight = wEl?.value?.trim();
+  const reps = rEl?.value?.trim();
+  if (!weight && !reps) { if(fb) { fb.innerHTML='<div class="log-saved-flash">⚠ Bitte Gewicht oder Reps eingeben</div>'; setTimeout(()=>fb.innerHTML='',2000); } return; }
+
+  let history = [];
+  try {
+    const result = await window.storage.get(`shift_v41_${exId}`);
+    if (result) history = JSON.parse(result.value);
+  } catch(e) { history = []; }
+
+  const d = new Date();
+  const dateStr = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}`;
+  history.push({ date: dateStr, weight: weight || '—', reps: reps || '—' });
+  if (history.length > 30) history = history.slice(-30);
+
+  try {
+    await window.storage.set(`shift_v41_${exId}`, JSON.stringify(history));
+    if (wEl) wEl.value = '';
+    if (rEl) rEl.value = '';
+    if (fb) { fb.innerHTML='<div class="log-saved-flash">✓ Gespeichert!</div>'; setTimeout(()=>fb.innerHTML='',2000); }
+    // Refresh history display
+    const histEl = document.getElementById(`lh_${exId}`);
+    if (histEl) {
+      const entries = history.slice(-5).reverse();
+      histEl.innerHTML = entries.map(e => `
+        <div class="log-entry">
+          <span class="log-date pd">${e.date}</span>
+          <span class="log-weight">${e.weight}</span>
+          <span class="log-reps">${e.reps}</span>
+        </div>`).join('');
+    }
+  } catch(e) { if(fb) fb.innerHTML='<div class="log-saved-flash">⚠ Fehler beim Speichern</div>'; }
+}
+
+// ============ FORTSCHRITT PAGE ============
+async function renderProgressPage() {
+  const container = document.getElementById('progress-content');
+  container.innerHTML = '<div class="log-empty" style="padding:40px 0">Lade Logs...</div>';
+
+  // Collect all exercise IDs from the page
+  const exercises = document.querySelectorAll('.exercise[data-exid]');
+  const allLogs = [];
+
+  for (const ex of exercises) {
+    const exId = ex.dataset.exid;
+    if (!exId) continue;
+    try {
+      const result = await window.storage.get(`shift_v41_${exId}`);
+      if (result) {
+        const history = JSON.parse(result.value);
+        if (history.length > 0) {
+          const dayKey = exId.split('_')[0];
+          allLogs.push({
+            exId,
+            name: getExerciseName(ex),
+            dayLabel: DAY_LABELS[dayKey] || dayKey,
+            history,
+            lastEntry: history[history.length - 1]
+          });
+        }
+      }
+    } catch(e) {}
+  }
+
+  if (allLogs.length === 0) {
+    container.innerHTML = `
+      <div class="progress-empty">
+        <span class="big">0</span>
+        Noch keine Sessions geloggt.<br>
+        Öffne eine Übung, tippe 📊 an und trag dein erstes Gewicht ein.
+      </div>`;
+    return;
+  }
+
+  // Sort by most recent
+  allLogs.sort((a, b) => {
+    const da = a.lastEntry?.date || '00.00';
+    const db = b.lastEntry?.date || '00.00';
+    return db.localeCompare(da);
+  });
+
+  container.innerHTML = allLogs.map(log => {
+    const entries = log.history.slice(-4).reverse();
+    const trend = getTrend(log.history);
+
+    const histHTML = entries.map(e => `
+      <div class="progress-row-mini">
+        <span class="pd">${e.date}</span>
+        <span>${e.weight}</span>
+        <span style="text-align:right;color:var(--text-faint)">${e.reps}</span>
+      </div>`).join('');
+
+    return `
+      <div class="progress-card">
+        <div class="progress-card-head">
+          <div>
+            <div class="progress-card-name">${log.name}</div>
+            <div class="progress-card-day">${log.dayLabel}</div>
+          </div>
+          <div>
+            <div class="progress-card-last-label">Letztes</div>
+            <div class="progress-card-last">${log.lastEntry.weight}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);text-align:right">${log.lastEntry.reps}</div>
+          </div>
+        </div>
+        <div class="progress-history-mini">${histHTML}</div>
+        ${trend ? `<div class="progress-trend ${trend.cls}">${trend.text}</div>` : ''}
+        <div style="padding:0 20px 16px;display:flex;justify-content:flex-end">
+          <button class="clear-log-btn" onclick="clearLog('${log.exId}')">Log löschen</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function getTrend(history) {
+  if (history.length < 2) return null;
+  const last = history[history.length - 1].weight;
+  const prev = history[history.length - 2].weight;
+  // Try to extract a number from the weight string
+  const extractKg = s => { const m = s.match(/(\d+(?:\.\d+)?)\s*kg/i); return m ? parseFloat(m[1]) : null; };
+  const lastKg = extractKg(last);
+  const prevKg = extractKg(prev);
+  if (lastKg === null || prevKg === null) return null;
+  if (lastKg > prevKg) return { cls: 'up', text: `↑ +${(lastKg - prevKg).toFixed(1)}kg seit letzter Session` };
+  if (lastKg === prevKg) return { cls: 'same', text: '→ Gleiches Gewicht wie letzte Session' };
+  return { cls: 'same', text: `↓ ${(prevKg - lastKg).toFixed(1)}kg weniger als letzte Session` };
+}
+
+async function clearLog(exId) {
+  if (!confirm('Log für diese Übung wirklich löschen?')) return;
+  try {
+    await window.storage.delete(`shift_v41_${exId}`);
+    renderProgressPage();
+  } catch(e) {}
+}
+
+// Init
+initLogs();
+</script>
+</body>
+</html>
